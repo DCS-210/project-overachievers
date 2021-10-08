@@ -10,7 +10,13 @@ library(broom)
 ```
 
 ## 1. Introduction
-The World Happiness Report dataset was published by Sustainable Development Solutions Network on Kaggle. The scores and rankings from this dataset were retrieved from the Gallup World Poll. The data we are looking at is a collection of what is defined as the ‘Happiness scores’ which were attributed to a list of `r nrow(data)’ countries. The evaluation poll consisted of several questions which were taken from the Cantril ladder which rank features of quality of life answers from 10 (being the most desirable) and 0 (being the least desirable). The data spans findings from 2013 to 2016 and employs the Gallup weights to make the estimates representative. 
+
+The World Happiness Report dataset was published by Sustainable Development Solutions Network on Kaggle (https://www.kaggle.com/tunguz/pharmaceutical-drug-spending-by-countries) . The scores and rankings from this dataset were retrieved from the Gallup World Poll. The data spans findings from 2013 to 2016 and employs the Gallup weights to make the estimates representative. The data we are looking at is a collection of what is defined as the ‘Happiness scores’ which were attributed to a list of  countries. The evaluation poll consisted of several questions which were taken from the Cantril ladder which rank features of quality of life answers from 10 (being the most desirable) and 0 (being the least desirable) which makes up the main variable: “Happiness Score”. These scores were then ranked in order to create the list of world’s happiest countries.  There are also several other variables that we will be examining within this data set (how these factors influence happiness scores): Economy (GDP Percent), Family, Freedom, and Trust (Government). We are interested in seeing how these variables affect happiness and differences by continent/region. 
+
+For our other data set we selected the Pharmaceutical Drug Spending by Country dataset which was published by Bojan Tunguz on Kaggle. This dataset was created by merging data from two sources. The variables of health spending, GDP, and US dollars per capita for each country were collected from the Organisation for Economic Cooperation and Development website (https://data.oecd.org/healthres/pharmaceutical-spending.htm). The total spending and population data was retrieved from DataHub (http://datahub.io/core/population). We are interested in seeing different spending distributions across countries/regions. 
+
+We are first generally interested in running summary statistics and plots on the variables within each respective data set. For our main analysis we are interested in merging these data sets together to see if there is a general correlation/relationship between the Pharmaceutical Spending and World Happiness Rank. Our hypothesis is that countries near the median for Pharmaceutical Drug Spending will be higher up in the world happiness rank.
+
 
 ## 2. Data
 
@@ -52,17 +58,40 @@ glimpse(drug)
 ```
 ## 3. Data analysis plan
 #### The comparison groups you will use, if applicable.
-How different variables affect the happiness score. Impact of geographical location on the Happiness score. 
 
+1. Merge Pharmaceutical Drug Spending and World Happiness Report Data Sets together 
+2. Find unique country lists for each data set
+3. Remove countries present from one but missing from other (any other NA values)
+4. Filter for specific year within Pharmaceutical Drug Spending (2015)
+5. Run summary statistics on each data set (grouping by continent/region). 
+6. Show distributions of Happiness Scores by continent/region
+    * Faceted Barplot
+7. Show distributions of Pharmaceutical Spending 
+    * Faceted Barplot
+8. Correlation between Pharmaceutical Spending and World Happiness Ranking
+    * Scatter plot
+    * Density
+    * Look at top 5 and lowest 5 in each category for each data set and compare
+9. Other analyses tbd.
+ 
+#### Comparision Groups Used
+
+* How different variables affect the happiness score. Impact of geographical location on the Happiness score. 
+ 
+ 
 #### Very preliminary exploratory data analysis, including some summary statistics and visualizations, along with some explanation on how they help you learn more about your data. (You can add to these later as you work on your project.)
 
-We are currently working on defining these and will add these later as we work on our project. 
+* See above psuedo-code, will add throughout as well. 
 
 #### The statistical method(s) that you believe will be useful in answering your question(s). (You can update these later as you work on your project.)
 
-We will resort to the methods we have explored in class. We will describe the specific methods as we progress through our work.
+* See above psuedo-code, will add throughout as well. 
 
 #### What results from these specific statistical methods are needed to support your hypothesized answer?
+
+* Meaningful differences in distributions across both data sets (by continent/country)
+* Significant correlation between Pharmaceutical Spending (near median) and World Happiness ranking.
+
 
 
 
