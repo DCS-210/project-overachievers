@@ -1,6 +1,6 @@
 ---
 title: "Project proposal"
-author: "Team name"
+author: "Overachievers"
 output: github_document
 ---
 
@@ -12,11 +12,44 @@ library(broom)
 ## 1. Introduction
 
 
-
 ## 2. Data
 
+```{r}
+#install.packages("codebook")
+```
 
+```{r load-world-happiness-data}
+happy2015 <- read_csv("/cloud/project/data/world-happiness/2015.csv")
+#happy2016 <- read_csv("/cloud/project/data/world-happiness/2016.csv")
+#happy2017 <- read_csv("/cloud/project/data/world-happiness/2017.csv")
+#happy2018 <- read_csv("/cloud/project/data/world-happiness/2018.csv")
+#happy2019 <- read_csv("/cloud/project/data/world-happiness/2019.csv")
+drug <- read_csv("/cloud/project/data/pharmaceutical-drug/pharmaceutical_data_csv.csv")
+```
 
+```{r glimpse-2015-dataset}
+glimpse(happy2015)
+```
+
+```{r glimpse-2016-dataset}
+#glimpse(happy2016)
+```
+
+```{r glimpse-2017-dataset}
+#glimpse(happy2017)
+```
+
+```{r glimpse-2018-dataset}
+#glimpse(happy2018)
+```
+
+```{r glimpse-2019-dataset}
+#glimpse(happy2019)
+```
+
+```{r glimpse-drug-dataset}
+glimpse(drug)
+```
 ## 3. Data analysis plan
 
 
