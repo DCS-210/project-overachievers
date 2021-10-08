@@ -105,6 +105,12 @@ glimpse(happy2015)
     ## $ `Dystopia Residual`             <dbl> 2.51738, 2.70201, 2.49204, 2.46531, 2.…
 
 ``` r
+dim(happy2015)
+```
+
+    ## [1] 158  12
+
+``` r
 #glimpse(happy2016)
 ```
 
@@ -133,6 +139,12 @@ glimpse(drug)
     ## $ USD_CAP     <dbl> 35.720, 36.056, 39.871, 47.559, 47.561, 46.908, 47.649, 50…
     ## $ FLAG_CODES  <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA…
     ## $ TOTAL_SPEND <dbl> 462.11, 475.11, 533.47, 652.65, 660.76, 658.26, 676.23, 72…
+
+``` r
+dim(drug)
+```
+
+    ## [1] 1036    7
 
 ## 3. Data analysis plan
 
