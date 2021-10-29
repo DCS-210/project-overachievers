@@ -141,3 +141,5 @@ In our further plots, we will do linear regression to determine if there is some
 
 * Meaningful differences in distributions across both data sets (by continent/country)
 * Significant correlation between Pharmaceutical Spending (near median) and World Happiness ranking.
+* Observations and hypotheses which about the degree of importance given to abstract concepts such as Freedom and Trust as opposed to more concrete and measurable ones such as Health, Life Expectancy, and Economy. 
+* Differences between happiness variables impact on overall happiness across regions  
