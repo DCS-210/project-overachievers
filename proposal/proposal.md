@@ -85,6 +85,8 @@ drug <- read_csv("/cloud/project/data/pharmaceutical-drug/pharmaceutical_data_cs
     ## ℹ Use `spec()` to retrieve the full column specification for this data.
     ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
 
+World Happiness Report dataset:
+
 ``` r
 glimpse(happy2015)
 ```
@@ -110,6 +112,9 @@ dim(happy2015)
 
     ## [1] 158  12
 
+We will focus on the 2015 dataset. If time permits, then we will look at
+combining the 2016 to 2019 dataset.
+
 ``` r
 #glimpse(happy2016)
 ```
@@ -125,6 +130,8 @@ dim(happy2015)
 ``` r
 #glimpse(happy2019)
 ```
+
+Pharmaceutical Drug Spending by Country dataset:
 
 ``` r
 glimpse(drug)
@@ -178,6 +185,58 @@ dim(drug)
 #### Very preliminary exploratory data analysis, including some summary statistics and visualizations, along with some explanation on how they help you learn more about your data. (You can add to these later as you work on your project.)
 
 -   See above psuedo-code, will add throughout as well.
+
+``` r
+summary(happy2015)
+```
+
+    ##    Country             Region          Happiness Rank   Happiness Score
+    ##  Length:158         Length:158         Min.   :  1.00   Min.   :2.839  
+    ##  Class :character   Class :character   1st Qu.: 40.25   1st Qu.:4.526  
+    ##  Mode  :character   Mode  :character   Median : 79.50   Median :5.232  
+    ##                                        Mean   : 79.49   Mean   :5.376  
+    ##                                        3rd Qu.:118.75   3rd Qu.:6.244  
+    ##                                        Max.   :158.00   Max.   :7.587  
+    ##  Standard Error    Economy (GDP per Capita)     Family      
+    ##  Min.   :0.01848   Min.   :0.0000           Min.   :0.0000  
+    ##  1st Qu.:0.03727   1st Qu.:0.5458           1st Qu.:0.8568  
+    ##  Median :0.04394   Median :0.9102           Median :1.0295  
+    ##  Mean   :0.04788   Mean   :0.8461           Mean   :0.9910  
+    ##  3rd Qu.:0.05230   3rd Qu.:1.1584           3rd Qu.:1.2144  
+    ##  Max.   :0.13693   Max.   :1.6904           Max.   :1.4022  
+    ##  Health (Life Expectancy)    Freedom       Trust (Government Corruption)
+    ##  Min.   :0.0000           Min.   :0.0000   Min.   :0.00000              
+    ##  1st Qu.:0.4392           1st Qu.:0.3283   1st Qu.:0.06168              
+    ##  Median :0.6967           Median :0.4355   Median :0.10722              
+    ##  Mean   :0.6303           Mean   :0.4286   Mean   :0.14342              
+    ##  3rd Qu.:0.8110           3rd Qu.:0.5491   3rd Qu.:0.18025              
+    ##  Max.   :1.0252           Max.   :0.6697   Max.   :0.55191              
+    ##    Generosity     Dystopia Residual
+    ##  Min.   :0.0000   Min.   :0.3286   
+    ##  1st Qu.:0.1506   1st Qu.:1.7594   
+    ##  Median :0.2161   Median :2.0954   
+    ##  Mean   :0.2373   Mean   :2.0990   
+    ##  3rd Qu.:0.3099   3rd Qu.:2.4624   
+    ##  Max.   :0.7959   Max.   :3.6021
+
+``` r
+summary(drug)
+```
+
+    ##    LOCATION              TIME       PC_HEALTHXP         PC_GDP      
+    ##  Length:1036        Min.   :1970   Min.   : 5.545   Min.   :0.2070  
+    ##  Class :character   1st Qu.:1987   1st Qu.:11.516   1st Qu.:0.7682  
+    ##  Mode  :character   Median :1999   Median :14.967   Median :1.1415  
+    ##                     Mean   :1997   Mean   :16.406   Mean   :1.1709  
+    ##                     3rd Qu.:2007   3rd Qu.:20.590   3rd Qu.:1.5232  
+    ##                     Max.   :2016   Max.   :40.239   Max.   :2.7970  
+    ##     USD_CAP         FLAG_CODES         TOTAL_SPEND      
+    ##  Min.   :   3.16   Length:1036        Min.   :     6.3  
+    ##  1st Qu.: 111.10   Class :character   1st Qu.:   728.2  
+    ##  Median : 266.33   Mode  :character   Median :  2349.6  
+    ##  Mean   : 295.05                      Mean   : 11765.4  
+    ##  3rd Qu.: 446.11                      3rd Qu.:  7778.2  
+    ##  Max.   :1162.40                      Max.   :373009.9
 
 #### The statistical method(s) that you believe will be useful in answering your question(s). (You can update these later as you work on your project.)
 

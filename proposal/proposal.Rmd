@@ -32,11 +32,13 @@ happy2015 <- read_csv("/cloud/project/data/world-happiness/2015.csv")
 #happy2019 <- read_csv("/cloud/project/data/world-happiness/2019.csv")
 drug <- read_csv("/cloud/project/data/pharmaceutical-drug/pharmaceutical_data_csv.csv")
 ```
+World Happiness Report dataset: 
 
 ```{r glimpse-2015-dataset}
 glimpse(happy2015)
 dim(happy2015)
 ```
+We will focus on the 2015 dataset. If time permits, then we will look at combining the 2016 to 2019 dataset. 
 
 ```{r glimpse-2016-dataset}
 #glimpse(happy2016)
@@ -53,6 +55,8 @@ dim(happy2015)
 ```{r glimpse-2019-dataset}
 #glimpse(happy2019)
 ```
+
+Pharmaceutical Drug Spending by Country dataset: 
 
 ```{r glimpse-drug-dataset}
 glimpse(drug)
@@ -86,9 +90,18 @@ dim(drug)
 
 * See above psuedo-code, will add throughout as well. 
 
+```{r}
+summary(happy2015)
+```
+
+```{r}
+summary(drug)
+```
+
 #### The statistical method(s) that you believe will be useful in answering your question(s). (You can update these later as you work on your project.)
 
 * See above psuedo-code, will add throughout as well. 
+
 
 #### What results from these specific statistical methods are needed to support your hypothesized answer?
 
