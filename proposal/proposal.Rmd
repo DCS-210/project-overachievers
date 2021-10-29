@@ -88,8 +88,6 @@ dim(drug)
  
 #### Very preliminary exploratory data analysis, including some summary statistics and visualizations, along with some explanation on how they help you learn more about your data. (You can add to these later as you work on your project.)
 
-* See above psuedo-code, will add throughout as well. 
-
 ```{r summary-statistics-on-happiness-data}
 summary(happy2015)
 ```
@@ -97,6 +95,8 @@ summary(happy2015)
 ```{r summary-statistics-on-drug-data}
 summary(drug)
 ```
+
+(See code below for a combination of preliminary exploratory data analysis and statistical methods that we would use)
 
 #### The statistical method(s) that you believe will be useful in answering your question(s). (You can update these later as you work on your project.)
 
@@ -112,6 +112,30 @@ From this preliminary analysis of region on happiness scores, it is apparent tha
 
 We are interested in further examining these differences in scores and the factors that influence them such as economy, health, family, freedom and trust in government. We hypothesize that different regions might be affected differently by these variables. For example, we believe that family might have a larger impact on overall happiness in regions such as Asia over the US because of the collective vs. individualistic society. 
 
+```{r finding-region-statistics}
+happy2015 %>%
+    group_by(Region) %>%
+    summarise(
+        mean_happiness_score = mean(`Happiness Score`, na.rm = TRUE), 
+        median_happiness_score = median(`Happiness Score`, na.rm = TRUE), 
+        sd_happiness_score = sd(`Happiness Score`, na.rm = TRUE))                              
+```
+
+Since we are working on 2015 dataset for the world happinness report, we will look into the 2015 data from the pharmaceutical drug spending in 2015. From preliminary findings in the dataset, we will then merge the two datasets to combine our analysis. 
+
+```{r finding-drug-spending-by-country}
+drug %>%
+    filter(TIME == "2015") %>%
+    ggplot(aes(x = LOCATION, y = TOTAL_SPEND)) +
+    geom_jitter() +
+    labs(x = "Countries",
+         y = "Total spending on pharmaceutical drugs", 
+        title = "Total spending on pharmaceutical drugs in 2015 by countries")
+```
+
+In the overall spending, we see that most of the countries are between 0 to 50,000, however, we see an anomaly, USA that has a much higher total spending in the dataset. We plan to further examine the different correlation between happiness factors, especially health factor (life expectancy) and spending on pharmaceutical drugs.
+
+In our further plots, we will do linear regression to determine if there is some strong or weak correlation between the factors and happiness score.
 
 #### What results from these specific statistical methods are needed to support your hypothesized answer?
 
