@@ -58,6 +58,7 @@ dim(happy2015)
 glimpse(drug)
 dim(drug)
 ```
+
 ## 3. Data analysis plan
 #### The comparison groups you will use, if applicable.
 
@@ -93,7 +94,3 @@ dim(drug)
 
 * Meaningful differences in distributions across both data sets (by continent/country)
 * Significant correlation between Pharmaceutical Spending (near median) and World Happiness ranking.
-
-
-
-
