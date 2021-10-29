@@ -240,7 +240,28 @@ summary(drug)
 
 #### The statistical method(s) that you believe will be useful in answering your question(s). (You can update these later as you work on your project.)
 
--   See above psuedo-code, will add throughout as well.
+``` r
+happy2015 %>%
+    group_by(Region) %>%
+    summarise(
+        mean_happiness_score = mean(`Happiness Score`, na.rm = TRUE), 
+        median_happiness_score = median(`Happiness Score`, na.rm = TRUE), 
+        sd_happiness_score = sd(`Happiness Score`, na.rm = TRUE))                              
+```
+
+    ## # A tibble: 10 × 4
+    ##    Region                          mean_happiness_… median_happines… sd_happiness_sc…
+    ##    <chr>                                      <dbl>            <dbl>            <dbl>
+    ##  1 Australia and New Zealand                   7.28             7.28          0.00141
+    ##  2 Central and Eastern Europe                  5.33             5.29          0.570  
+    ##  3 Eastern Asia                                5.63             5.73          0.554  
+    ##  4 Latin America and Caribbean                 6.14             6.15          0.729  
+    ##  5 Middle East and Northern Africa             5.41             5.26          1.10   
+    ##  6 North America                               7.27             7.27          0.218  
+    ##  7 Southeastern Asia                           5.32             5.36          0.950  
+    ##  8 Southern Asia                               4.58             4.57          0.571  
+    ##  9 Sub-Saharan Africa                          4.20             4.27          0.610  
+    ## 10 Western Europe                              6.69             6.94          0.825
 
 #### What results from these specific statistical methods are needed to support your hypothesized answer?
 

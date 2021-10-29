@@ -90,17 +90,27 @@ dim(drug)
 
 * See above psuedo-code, will add throughout as well. 
 
-```{r}
+```{r summary-statistics-on-happiness-data}
 summary(happy2015)
 ```
 
-```{r}
+```{r summary-statistics-on-drug-data}
 summary(drug)
 ```
 
 #### The statistical method(s) that you believe will be useful in answering your question(s). (You can update these later as you work on your project.)
 
-* See above psuedo-code, will add throughout as well. 
+```{r finding-region-statistics}
+happy2015 %>%
+    group_by(Region) %>%
+    summarise(
+        mean_happiness_score = mean(`Happiness Score`, na.rm = TRUE), 
+        median_happiness_score = median(`Happiness Score`, na.rm = TRUE), 
+        sd_happiness_score = sd(`Happiness Score`, na.rm = TRUE))                              
+```
+From this preliminary analysis of region on happiness scores, it is apparent that there are differences between region in happiness scores. Australia + New Zealand and North America all had the high scores (7.28, 7.27) out of a total of 10. Sub-Saharan Africa had the lowest happiness scores at 4.20. 
+
+We are interested in further examining these differences in scores and the factors that influence them such as economy, health, family, freedom and trust in government. We hypothesize that different regions might be affected differently by these variables. For example, we believe that family might have a larger impact on overall happiness in regions such as Asia over the US because of the collective vs. individualistic society. 
 
 
 #### What results from these specific statistical methods are needed to support your hypothesized answer?
