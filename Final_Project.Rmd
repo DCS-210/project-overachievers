@@ -7,6 +7,7 @@ output: github_document
 ```{r load-packages, message = FALSE}
 library(tidyverse)
 library(broom)
+library(countrycode)
 ```
 
 ```{r pulling-in-data-sets}
@@ -14,21 +15,17 @@ happiness <- read_csv("/cloud/project/data/world-happiness/2015.csv")
 drug_spending <- read_csv("/cloud/project/data/pharmaceutical-drug/pharmaceutical_data_csv.csv")
 ```
 
-
 ```{r cleaning-data-sets}
 drug_spending <- drug_spending %>%
-  filter(TIME == 2015)
+  filter(TIME == 2015) %>%
+  mutate(Country = countrycode(LOCATION, "iso3c", "country.name"))
 ```
 
-
-
 ```{r finding-drug-spending-by-country}
-drug %>%
-    filter(TIME == "2015") %>%
+drug_spending %>%
     ggplot(aes(x = LOCATION, y = TOTAL_SPEND)) +
     geom_jitter() +
     labs(x = "Countries",
          y = "Total spending on pharmaceutical drugs", 
         title = "Total spending on pharmaceutical drugs in 2015 by countries")
 ```
-
