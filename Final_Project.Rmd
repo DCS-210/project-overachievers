@@ -18,7 +18,19 @@ drug_spending <- read_csv("/cloud/project/data/pharmaceutical-drug/pharmaceutica
 ```{r cleaning-data-sets}
 drug_spending <- drug_spending %>%
   filter(TIME == 2015) %>%
-  mutate(Country = countrycode(LOCATION, "iso3c", "country.name"))
+  mutate(Country = countrycode(LOCATION, "iso3c", "country.name")) %>%
+  mutate(Continent = countrycode(LOCATION, "iso3c", "continent"))
+```
+
+```{r cleaning-happiness-dataset}
+happiness$Country_title = str_to_title(happiness$Country)
+
+happiness %>%
+  mutate(Continent = countrycode(Country_title, "country.name", "continent"))
+```
+
+```{r}
+combined <- inner_join(happiness, drug_spending, by = "Country")
 ```
 
 ```{r finding-drug-spending-by-country}
