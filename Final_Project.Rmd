@@ -41,3 +41,22 @@ drug_spending %>%
          y = "Total spending on pharmaceutical drugs", 
         title = "Total spending on pharmaceutical drugs in 2015 by countries")
 ```
+```{r filtering-data-to-European-Countries }
+european_combined <- combined %>%
+  filter(NonEU_EU != "Outside-Europe")
+```
+
+
+```{r finding-linear-regression-GDP-Happiness-Score}
+GDP_happiness.lm = lm(`Happiness Score` ~ PC_GDP, data = european_combined) 
+GDP_Hapiness.res = resid(GDP_happiness.lm)
+GDP_Hapiness.res
+```
+
+```{r}
+augmented_fit_lm <- augment(gdp_happiness_correlation$fit)
+augmented_fit_lm
+
+finaldf <- cbind(european_combined$Country, augmented_fit_lm )
+finaldf
+```
