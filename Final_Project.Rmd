@@ -1,0 +1,62 @@
+---
+title: "FinalProject"
+author: "Overachievers"
+output: github_document
+---
+
+```{r load-packages, message = FALSE}
+library(tidyverse)
+library(broom)
+library(countrycode)
+```
+
+```{r pulling-in-data-sets}
+happiness <- read_csv("/cloud/project/data/world-happiness/2015.csv")
+drug_spending <- read_csv("/cloud/project/data/pharmaceutical-drug/pharmaceutical_data_csv.csv")
+```
+
+```{r cleaning-data-sets}
+drug_spending <- drug_spending %>%
+  filter(TIME == 2015) %>%
+  mutate(Country = countrycode(LOCATION, "iso3c", "country.name")) %>%
+  mutate(Continent = countrycode(LOCATION, "iso3c", "continent"))
+```
+
+```{r cleaning-happiness-dataset}
+happiness$Country_title = str_to_title(happiness$Country)
+
+happiness %>%
+  mutate(Continent = countrycode(Country_title, "country.name", "continent"))
+```
+
+```{r}
+combined <- inner_join(happiness, drug_spending, by = "Country")
+```
+
+```{r finding-drug-spending-by-country}
+drug_spending %>%
+    ggplot(aes(x = LOCATION, y = TOTAL_SPEND)) +
+    geom_jitter() +
+    labs(x = "Countries",
+         y = "Total spending on pharmaceutical drugs", 
+        title = "Total spending on pharmaceutical drugs in 2015 by countries")
+```
+```{r filtering-data-to-European-Countries }
+european_combined <- combined %>%
+  filter(NonEU_EU != "Outside-Europe")
+```
+
+
+```{r finding-linear-regression-GDP-Happiness-Score}
+GDP_happiness.lm = lm(`Happiness Score` ~ PC_GDP, data = european_combined) 
+GDP_Hapiness.res = resid(GDP_happiness.lm)
+GDP_Hapiness.res
+```
+
+```{r}
+augmented_fit_lm <- augment(gdp_happiness_correlation$fit)
+augmented_fit_lm
+
+finaldf <- cbind(european_combined$Country, augmented_fit_lm )
+finaldf
+```
