@@ -8,6 +8,15 @@ output: github_document
 library(tidyverse)
 library(broom)
 library(countrycode)
+library(RColorBrewer)
+library(tmap)
+library(rgdal)
+library(leaflet)
+library("sf")
+library("raster")
+library("sp")
+#install.packages("rnaturalearth")
+library(rnaturalearth)
 ```
 
 ```{r pulling-in-data-sets}
@@ -41,11 +50,29 @@ drug_spending %>%
          y = "Total spending on pharmaceutical drugs", 
         title = "Total spending on pharmaceutical drugs in 2015 by countries")
 ```
+```{r create-EU-non_EU-vector}
+
+x <- c("non-EU", "non-EU", "EU", "non-EU", "EU", "EU", "EU", "EU", "Outside-Europe", "Outside-Europe", "EU", "EU", "EU", "Outside-Europe", "EU", "EU", "EU", "EU", "Outside-Europe", "EU", "EU", "EU", "EU", "non-EU", "EU", "EU", "EU", "EU", "EU")
+```
+
+
+```{r adding-new-column-of-EU-nonEU}
+combined$NonEU_EU <- x
+```
+
+
 ```{r filtering-data-to-European-Countries }
 european_combined <- combined %>%
   filter(NonEU_EU != "Outside-Europe")
 ```
 
+```{r linear-regresssion-PC_GDP-Happiness-Score}
+gdp_happiness_correlation <- 
+  linear_reg() %>%
+  set_engine("lm") %>%
+  fit(`Happiness Score` ~ PC_GDP + factor(NonEU_EU), data = european_combined)
+gdp_happiness_correlation
+```
 
 ```{r finding-linear-regression-GDP-Happiness-Score}
 GDP_happiness.lm = lm(`Happiness Score` ~ PC_GDP, data = european_combined) 
@@ -59,4 +86,24 @@ augmented_fit_lm
 
 finaldf <- cbind(european_combined$Country, augmented_fit_lm )
 finaldf
+```
+
+```{r rename-country-column}
+finaldf <- rename(finaldf, Country = `european_combined$Country`)
+```
+
+
+```{r add-geometry-to-df}
+europe <- ne_countries(continent = 'europe', returnclass="sf")
+europe_map_df<- inner_join(finaldf, europe, by = c("Country" = "sovereignt"))
+```
+
+```{r europe-map}
+ggplot(europe_map_df) +
+  geom_sf(aes(fill = .std.resid, geometry = geometry)) +
+  labs(title = "Happiness Score Residuals",
+       x = "Longitude",
+       y = "Latitude", 
+       fill = "residuals") +
+  xlim(-60, 50)
 ```
