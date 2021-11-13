@@ -165,4 +165,39 @@ happy2015 %>%
         median_family = median(`Family`, na.rm = TRUE), 
         sd_family = sd(`Family`, na.rm = TRUE))                              
 ```
-
+```{r filter-AllEU}
+AllEUcountries <- 
+western_countries %>%
+filter( Region %in% c("Central and Eastern Europe","Western Europe"))
+AllEUcountries
+```
+Now we will see which countries are in the european union. 
+```{r EU-status}
+AllEUcountries <- AllEUcountries %>%
+     mutate(EU_status = case_when(Country %in% "Austria" ~ "EU",
+                                     Country %in% "Belgium" ~ "EU",
+                                     Country %in% "Bulgaria" ~ "EU",
+                                     Country %in% "Croatia" ~ "EU",
+                                     Country %in% "Cyprus" ~ "EU",
+                                     Country %in% "Czech Republic" ~ "EU",
+                                     Country %in% "Denmark" ~ "EU",
+                                     Country %in% "Estonia" ~ "EU",      
+                                     Country %in% "Finland" ~ "EU",   
+                                     Country %in% "France" ~ "EU",            
+                                     Country %in% "Germany" ~ "EU",       
+                                     Country %in% "Greece" ~ "EU",                                                    Country %in% "Hungary" ~ "EU",
+                                     Country %in% "Ireland" ~ "EU",   
+                                     Country %in% "Italy" ~ "EU",    
+                                     Country %in% "Latvia" ~ "EU",                                                    Country %in% "Lithuania" ~ "EU", 
+                                     Country %in% "Luxembourg" ~ "EU", 
+                                     Country %in% "Malta" ~ "EU",  
+                                     Country %in% "Netherlands" ~ "EU",   
+                                     Country %in% "Poland" ~ "EU",       
+                                     Country %in% "Portugal" ~ "EU",  
+                                     Country %in% "Romania" ~ "EU",     
+                                     Country %in% "Slovakia" ~ "EU",  
+                                     Country %in% "Slovenia" ~ "EU",                                                  Country %in% "Spain" ~ "EU",     
+                                     Country %in% "Sweden" ~ "EU",   
+                                     TRUE ~ "Non-EU"
+) )
+```
