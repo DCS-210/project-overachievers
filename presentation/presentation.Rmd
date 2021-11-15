@@ -114,7 +114,8 @@ style_xaringan(
 
 class: center, middle
 
-## A statement of the overall goal / research question
+## Goal 
+### We seek to find correlations between countrie's Happiness scores and specific factors.
 
 ---
 
