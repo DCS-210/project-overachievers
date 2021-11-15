@@ -35,6 +35,7 @@ library("sp")
 library(rnaturalearth)
 #install.packages("plotly")
 library(plotly)
+library(rgeos)
 ```
 
 ```{r setup, include=FALSE}
