@@ -1,8 +1,8 @@
 ---
 title: "Presentation title"
 subtitle: "Presentation subtitle (if any)"
-author: "Team name <br> Names of team members"
-institute: "University of Edinburgh"
+author: "Overachievers <br> Yueh Qi Chuah, Ben van Paassen, Mathieu Moutou"
+institute: "Bates College"
 date: "`r Sys.Date()`"
 output:
   xaringan::moon_reader:
@@ -22,6 +22,19 @@ library(tidymodels)
 library(palmerpenguins)
 library(knitr)
 library(xaringanthemer)
+library(broom)
+library(countrycode)
+library(RColorBrewer)
+library(tmap)
+library(rgdal)
+library(leaflet)
+library("sf")
+library("raster")
+library("sp")
+#install.packages("rnaturalearth")
+library(rnaturalearth)
+#install.packages("plotly")
+library(plotly)
 ```
 
 ```{r setup, include=FALSE}
@@ -30,15 +43,73 @@ knitr::opts_chunk$set(fig.retina = 3, dpi = 300, fig.width = 6, fig.asp = 0.618,
 ```
 
 ```{r load-data, include=FALSE}
-# Load your data here
+happiness <- read_csv("/cloud/project/data/world-happiness/2015.csv")
+drug_spending <- read_csv("/cloud/project/data/pharmaceutical-drug/pharmaceutical_data_csv.csv")
 ```
 
-```{r}
+```{r cleaning-data-sets, include=FALSE}
+drug_spending <- drug_spending %>%
+  filter(TIME == 2015) %>%
+  mutate(Country = countrycode(LOCATION, "iso3c", "country.name")) %>%
+  mutate(Continent = countrycode(LOCATION, "iso3c", "continent"))
+```
+
+```{r cleaning-happiness-dataset, include=FALSE}
+happiness$Country_title = str_to_title(happiness$Country)
+
+happiness %>%
+  mutate(Continent = countrycode(Country_title, "country.name", "continent"))
+```
+
+```{r combine-both-dataset, include=FALSE}
+combined <- inner_join(happiness, drug_spending, by = "Country")
+```
+
+```{r create-EU-non_EU-vector, include=FALSE}
+
+x <- c("non-EU", "non-EU", "EU", "non-EU", "EU", "EU", "EU", "EU", "Outside-Europe", "Outside-Europe", "EU", "EU", "EU", "Outside-Europe", "EU", "EU", "EU", "EU", "Outside-Europe", "EU", "EU", "EU", "EU", "non-EU", "EU", "EU", "EU", "EU", "EU")
+```
+
+
+```{r adding-new-column-of-EU-nonEU, include=FALSE}
+combined$NonEU_EU <- x
+```
+
+```{r filtering-data-to-European-Countries, include=FALSE}
+european_combined <- combined %>%
+  filter(NonEU_EU != "Outside-Europe")
+```
+
+```{r linear-regresssion-PC_GDP-Happiness-Score, include=FALSE}
+gdp_happiness_correlation <- 
+  linear_reg() %>%
+  set_engine("lm") %>%
+  fit(`Happiness Score` ~ PC_GDP + factor(NonEU_EU), data = european_combined)
+```
+
+```{r, include=FALSE}
+augmented_fit_lm <- augment(gdp_happiness_correlation$fit)
+
+finaldf <- cbind(european_combined$Country, augmented_fit_lm )
+
+```
+
+```{r rename-country-column, include=FALSE}
+finaldf <- rename(finaldf, Country = `european_combined$Country`)
+```
+
+
+```{r add-geometry-to-df, include=FALSE}
+europe <- ne_countries(continent = 'europe', returnclass="sf")
+europe_map_df<- inner_join(finaldf, europe, by = c("Country" = "name"))
+```
+
+```{r title-slide-settings, include = FALSE}
 style_xaringan(
-  title_slide_background_image = "img/confetti.jpg"
+  title_slide_background_image = "img/happiness.jpeg",
+  title_slide_text_color = "#000"
 )
 ```
-
 
 class: center, middle
 
@@ -50,6 +121,33 @@ class: inverse, center, middle
 
 # Section title
 
+---
+
+class: center, left
+
+# Implications
+
+.pull-left[
+```{r europe-map, echo=FALSE, warning=FALSE, out.height="30%", out.width="100%"}
+map <- ggplot(europe_map_df) +
+  geom_sf(aes(fill = .std.resid, geometry = europe_map_df$geometry)) +
+  labs(title = "Happiness Score Residuals",
+       x = "Longitude",
+       y = "Latitude", 
+       fill = "residuals") +
+  xlim(-40, 50) +
+  ylim(20, 85) +
+  scale_fill_distiller(palette = "Spectral")
+
+ggplotly(map)
+```
+]
+
+.pull-right[
+* some text goes here
+* more texts
+* texts
+]
 ---
 
 # Hello World
