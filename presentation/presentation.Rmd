@@ -123,7 +123,7 @@ class: inverse, center, middle
 
 ---
 
-class: center, left
+class: left, middle
 
 # Implications
 
