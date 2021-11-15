@@ -1,6 +1,6 @@
 ---
 title: "Project proposal"
-author: "Team name"
+author: "Overachievers"
 output: github_document
 ---
 
@@ -11,13 +11,135 @@ library(broom)
 
 ## 1. Introduction
 
+The World Happiness Report dataset was published by Sustainable Development Solutions Network on Kaggle (https://www.kaggle.com/tunguz/pharmaceutical-drug-spending-by-countries) . The scores and rankings from this dataset were retrieved from the Gallup World Poll. The data spans findings from 2013 to 2016 and employs the Gallup weights to make the estimates representative. The data we are looking at is a collection of what is defined as the ‘Happiness scores’ which were attributed to a list of  countries. The evaluation poll consisted of several questions which were taken from the Cantril ladder which rank features of quality of life answers from 10 (being the most desirable) and 0 (being the least desirable) which makes up the main variable: “Happiness Score”. These scores were then ranked in order to create the list of world’s happiest countries.  There are also several other variables that we will be examining within this data set (how these factors influence happiness scores): Economy (GDP Percent), Family, Freedom, and Trust (Government). We are interested in seeing how these variables affect happiness and differences by continent/region. 
+
+For our other data set we selected the Pharmaceutical Drug Spending by Country dataset which was published by Bojan Tunguz on Kaggle. This dataset was created by merging data from two sources. The variables of health spending, GDP, and US dollars per capita for each country were collected from the Organisation for Economic Cooperation and Development website (https://data.oecd.org/healthres/pharmaceutical-spending.htm). The total spending and population data was retrieved from DataHub (http://datahub.io/core/population). We are interested in seeing different spending distributions across countries/regions. 
+
+We are first generally interested in running summary statistics and plots on the variables within each respective data set. For our main analysis we are interested in merging these data sets together to see if there is a general correlation/relationship between the Pharmaceutical Spending and World Happiness Rank. Our hypothesis is that countries near the median for Pharmaceutical Drug Spending will be higher up in the world happiness rank.
 
 
 ## 2. Data
 
+```{r}
+#install.packages("codebook")
+```
 
+```{r load-world-happiness-data}
+happy2015 <- read_csv("/cloud/project/data/world-happiness/2015.csv")
+#happy2016 <- read_csv("/cloud/project/data/world-happiness/2016.csv")
+#happy2017 <- read_csv("/cloud/project/data/world-happiness/2017.csv")
+#happy2018 <- read_csv("/cloud/project/data/world-happiness/2018.csv")
+#happy2019 <- read_csv("/cloud/project/data/world-happiness/2019.csv")
+drug <- read_csv("/cloud/project/data/pharmaceutical-drug/pharmaceutical_data_csv.csv")
+```
+World Happiness Report dataset: 
+
+```{r glimpse-2015-dataset}
+glimpse(happy2015)
+dim(happy2015)
+```
+We will focus on the 2015 dataset. If time permits, then we will look at combining the 2016 to 2019 dataset. 
+
+```{r glimpse-2016-dataset}
+#glimpse(happy2016)
+```
+
+```{r glimpse-2017-dataset}
+#glimpse(happy2017)
+```
+
+```{r glimpse-2018-dataset}
+#glimpse(happy2018)
+```
+
+```{r glimpse-2019-dataset}
+#glimpse(happy2019)
+```
+
+Pharmaceutical Drug Spending by Country dataset: 
+
+```{r glimpse-drug-dataset}
+glimpse(drug)
+dim(drug)
+```
 
 ## 3. Data analysis plan
+#### The comparison groups you will use, if applicable.
 
+1. Merge Pharmaceutical Drug Spending and World Happiness Report Data Sets together 
+2. Find unique country lists for each data set
+3. Remove countries present from one but missing from other (any other NA values)
+4. Filter for specific year within Pharmaceutical Drug Spending (2015)
+5. Run summary statistics on each data set (grouping by continent/region). 
+6. Show distributions of Happiness Scores by continent/region
+    * Faceted Barplot
+7. Show distributions of Pharmaceutical Spending 
+    * Faceted Barplot
+8. Correlation between Pharmaceutical Spending and World Happiness Ranking
+    * Scatter plot
+    * Density
+    * Look at top 5 and lowest 5 in each category for each data set and compare
+9. Other analyses tbd.
+ 
+#### Comparision Groups Used
 
+* How different variables affect the happiness score. Impact of geographical location on the Happiness score. 
+ 
+ 
+#### Very preliminary exploratory data analysis, including some summary statistics and visualizations, along with some explanation on how they help you learn more about your data. (You can add to these later as you work on your project.)
 
+```{r summary-statistics-on-happiness-data}
+summary(happy2015)
+```
+
+```{r summary-statistics-on-drug-data}
+summary(drug)
+```
+
+(See code below for a combination of preliminary exploratory data analysis and statistical methods that we would use)
+
+#### The statistical method(s) that you believe will be useful in answering your question(s). (You can update these later as you work on your project.)
+
+```{r finding-region-statistics}
+happy2015 %>%
+    group_by(Region) %>%
+    summarise(
+        mean_happiness_score = mean(`Happiness Score`, na.rm = TRUE), 
+        median_happiness_score = median(`Happiness Score`, na.rm = TRUE), 
+        sd_happiness_score = sd(`Happiness Score`, na.rm = TRUE))                              
+```
+From this preliminary analysis of region on happiness scores, it is apparent that there are differences between region in happiness scores. Australia + New Zealand and North America all had the high scores (7.28, 7.27) out of a total of 10. Sub-Saharan Africa had the lowest happiness scores at 4.20. 
+
+We are interested in further examining these differences in scores and the factors that influence them such as economy, health, family, freedom and trust in government. We hypothesize that different regions might be affected differently by these variables. For example, we believe that family might have a larger impact on overall happiness in regions such as Asia over the US because of the collective vs. individualistic society. 
+
+```{r finding-region-statistics}
+happy2015 %>%
+    group_by(Region) %>%
+    summarise(
+        mean_happiness_score = mean(`Happiness Score`, na.rm = TRUE), 
+        median_happiness_score = median(`Happiness Score`, na.rm = TRUE), 
+        sd_happiness_score = sd(`Happiness Score`, na.rm = TRUE))                              
+```
+
+Since we are working on 2015 dataset for the world happinness report, we will look into the 2015 data from the pharmaceutical drug spending in 2015. From preliminary findings in the dataset, we will then merge the two datasets to combine our analysis. 
+
+```{r finding-drug-spending-by-country}
+drug %>%
+    filter(TIME == "2015") %>%
+    ggplot(aes(x = LOCATION, y = TOTAL_SPEND)) +
+    geom_jitter() +
+    labs(x = "Countries",
+         y = "Total spending on pharmaceutical drugs", 
+        title = "Total spending on pharmaceutical drugs in 2015 by countries")
+```
+
+In the overall spending, we see that most of the countries are between 0 to 50,000, however, we see an anomaly, USA that has a much higher total spending in the dataset. We plan to further examine the different correlation between happiness factors, especially health factor (life expectancy) and spending on pharmaceutical drugs.
+
+In our further plots, we will do linear regression to determine if there is some strong or weak correlation between the factors and happiness score.
+
+#### What results from these specific statistical methods are needed to support your hypothesized answer?
+
+* Meaningful differences in distributions across both data sets (by continent/country)
+* Significant correlation between Pharmaceutical Spending (near median) and World Happiness ranking.
+* Observations and hypotheses which about the degree of importance given to abstract concepts such as Freedom and Trust as opposed to more concrete and measurable ones such as Health, Life Expectancy, and Economy. 
+* Differences between happiness variables impact on overall happiness across regions  

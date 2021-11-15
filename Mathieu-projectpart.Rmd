@@ -1,0 +1,203 @@
+---
+title: "Mathieu-project"
+output: html_document
+---
+``` {r}
+library(tidyverse)
+library(broom)
+library(tidymodels)
+library(openintro)
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Big picture 
+
+GDP and happiness score 
+
+western/non-western 
+Happiness score + family 
+
+
+
+
+# 2. Data
+
+```{r}
+#install.packages("codebook")
+```
+
+``` {r}
+happy2015 <- read_csv("/cloud/project/data/world-happiness/2015.csv")
+glimpse(happy2015)
+dim(happy2015)
+```
+## R Markdown
+
+
+Human Values, Civil Economy and Subjective Well-being is written by Leonardo Bechhetti, Luigino Bruni and Stefano Zamagni. This chapter begins with a critique of the field of economics ("Economics today looks like physics before the discovery of electrons"), identifying reductionism in which humans are conceived of as 100% self-interested individuals (economic reductionism), profit maximization is prioritized over all other interests (corporate reductionism), and societal values are narrowly identified with GDP and ignore environmental, cultural, spiritual and relational aspects (value reductionism). The chapter them focuses on a theoretical approach termed "Civil Economy paradigm", and research about it demonstrating that going beyond reductionism leads to greater socialization for people and communities, and a rise in priority of the values of reciprocity, friendship, trustworthiness, and benevolence. It makes the argument that positive social relationships (trust, benevolence, shared social identities) yield happiness and positive economic outcomes. It ends with recommendations for move from the dominant model of elite-competitive democracy to a participatory/deliberative model of democracy with bottom-up political and economic participation and incentives for non-selfish actions (altruistic people) and corporations with wider goals than pure profit (ethical and environmentally responsible corporations).
+```{r finding-region-statistics}
+happy2015 %>%
+    group_by(Region) %>%
+    summarise(
+        mean_happiness_score = mean(`Happiness Score`, na.rm = TRUE), 
+        median_happiness_score = median(`Happiness Score`, na.rm = TRUE), 
+        sd_happiness_score = sd(`Happiness Score`, na.rm = TRUE))                              
+```
+We will create a new column to categorize if a country is Western, Non-Western, In-between based on their regions. 
+
+
+```{r western-level}
+happy2015 <- happy2015 %>%
+     mutate(western_level = case_when(Region %in% "Australia and New Zealand" ~ "Western",
+                                     Region %in% "Central and Eastern Europe" ~ "Western",
+                                     Region %in% "Eastern Asia" ~ "Non-Western",                                        Region %in% "Latin America and Caribbean" ~ "Western",
+                                     Region %in% "Middle East and Northern Africa" ~ "Non-Western",
+                                     Region %in% "North America" ~ "Western",
+                                     Region %in% "Southeastern Asia" ~ "Non-Western",
+                                     Region %in% "Southern Asia" ~ "Non-Western",
+                                     Region %in% "Sub-Saharan Africa" ~ "Non-Western",
+                                     Region %in% "Western Europe" ~ "Western",
+) )
+```
+Now, we will group by western and non western regions to see changes in the statistics 
+```{r filter-western}
+western_countries <- filter(happy2015, western_level == "Western")
+western_countries
+nonwestern_countries <- filter(happy2015, western_level =="Non-Western")
+nonwestern_countries
+```
+```{r family-happiness-regress}
+
+
+```
+We will run a statistics test on Western countries 
+```{r western}
+summary(western_countries)
+summary(nonwestern_countries)
+```
+This is to see how family correlates with happiness score for western countries
+```{r family-hapiness-western}
+western_countries %>%
+  ggplot(aes(x = `Family`,
+           y = `Happiness Score`)) +
+  xlab("Happiness Score") +
+  ylab("Family") +
+  geom_point()
+```
+Plot a regression line for the above data and find its r^2
+```{r plotting-linear-regression-line}
+ggplot(western_countries, aes(x = `Happiness Score`, y = Family)) +
+  geom_jitter(color = "blue") +
+  geom_smooth(method = "lm", 
+              color = "orange", 
+              se = FALSE) +
+  labs(title = "Relationship Between Family and Happiness Score for western countries ",
+       x = "Happiness Score",
+       y = "Family")
+
+western_countries_lr <- 
+  linear_reg() %>%
+  set_engine("lm") %>%
+  fit(`Happiness Score` ~ Family, data = western_countries) 
+
+
+western_countries_lr
+glance(western_countries_lr)$r.squared
+```
+We find that the equation for the happiness score for 
+```{r plotting-linear-regression-line}
+ggplot(nonwestern_countries, aes(x = `Happiness Score`, y = Family)) +
+  geom_jitter(color = "blue") +
+  geom_smooth(method = "lm", 
+              color = "orange", 
+              se = FALSE) +
+  labs(title = "Relationship Between Family and Happiness Score for non-western countries ",
+       x = "Happiness Score",
+       y = "Family")
+
+nonwestern_countries_lr <- 
+  linear_reg() %>%
+  set_engine("lm") %>%
+  fit(`Happiness Score` ~ Family, data = nonwestern_countries) 
+
+
+nonwestern_countries_lr
+glance(nonwestern_countries_lr)$r.squared
+```
+
+
+```{r plotting-linear-regression-line-all }
+ggplot(happy2015, aes(x = `Happiness Score`, y = Family)) +
+  geom_jitter(color = "blue") +
+  geom_smooth(method = "lm", 
+              color = "orange", 
+              se = FALSE) +
+  labs(title = "Relationship Between Family and Happiness Score for all countries ",
+       x = "Happiness Score",
+       y = "Family")
+```
+
+```{r family-hapiness-nonwestern}
+nonwestern_countries %>%
+  ggplot(aes(x = Family,
+          y = `Happiness Score`)) +
+  xlab("Family") +
+  ylab("Hapiness Score") +
+  geom_point()
+```
+```{r finding-western-statistics}
+happy2015 %>%
+    group_by(western_level) %>%
+    summarise(
+        mean_happiness_score = mean(`Happiness Score`, na.rm = TRUE), 
+        median_happiness_score = median(`Happiness Score`, na.rm = TRUE), 
+        sd_happiness_score = sd(`Happiness Score`, na.rm = TRUE))                              
+```
+
+```{r finding-western-statisticsfor-family}
+happy2015 %>%
+    group_by(western_level) %>%
+    summarise(
+        mean_family = mean(`Family`, na.rm = TRUE), 
+        median_family = median(`Family`, na.rm = TRUE), 
+        sd_family = sd(`Family`, na.rm = TRUE))                              
+```
+```{r filter-AllEU}
+AllEUcountries <- 
+western_countries %>%
+filter( Region %in% c("Central and Eastern Europe","Western Europe"))
+AllEUcountries
+```
+Now we will see which countries are in the european union. 
+```{r EU-status}
+AllEUcountries <- AllEUcountries %>%
+     mutate(EU_status = case_when(Country %in% "Austria" ~ "EU",
+                                     Country %in% "Belgium" ~ "EU",
+                                     Country %in% "Bulgaria" ~ "EU",
+                                     Country %in% "Croatia" ~ "EU",
+                                     Country %in% "Cyprus" ~ "EU",
+                                     Country %in% "Czech Republic" ~ "EU",
+                                     Country %in% "Denmark" ~ "EU",
+                                     Country %in% "Estonia" ~ "EU",      
+                                     Country %in% "Finland" ~ "EU",   
+                                     Country %in% "France" ~ "EU",            
+                                     Country %in% "Germany" ~ "EU",       
+                                     Country %in% "Greece" ~ "EU",                                                    Country %in% "Hungary" ~ "EU",
+                                     Country %in% "Ireland" ~ "EU",   
+                                     Country %in% "Italy" ~ "EU",    
+                                     Country %in% "Latvia" ~ "EU",                                                    Country %in% "Lithuania" ~ "EU", 
+                                     Country %in% "Luxembourg" ~ "EU", 
+                                     Country %in% "Malta" ~ "EU",  
+                                     Country %in% "Netherlands" ~ "EU",   
+                                     Country %in% "Poland" ~ "EU",       
+                                     Country %in% "Portugal" ~ "EU",  
+                                     Country %in% "Romania" ~ "EU",     
+                                     Country %in% "Slovakia" ~ "EU",  
+                                     Country %in% "Slovenia" ~ "EU",                                                  Country %in% "Spain" ~ "EU",     
+                                     Country %in% "Sweden" ~ "EU",   
+                                     TRUE ~ "Non-EU"
+) )
+```
