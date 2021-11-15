@@ -1,6 +1,6 @@
 ---
-title: "Presentation title"
-subtitle: "Presentation subtitle (if any)"
+title: "What Makes You Happy?"
+subtitle: "Examining potential relationship between happiness and other factors"
 author: "Overachievers <br> Yueh Qi Chuah, Ben van Paassen, Mathieu Moutou"
 institute: "Bates College"
 date: "`r Sys.Date()`"
@@ -8,7 +8,7 @@ output:
   xaringan::moon_reader:
     css: xaringan-themer.css
     lib_dir: libs
-    nature:
+    nature: 
       ratio: "16:9"
       highlightStyle: github
       highlightLines: true
@@ -115,6 +115,14 @@ style_xaringan(
 class: center, middle
 
 ## A statement of the overall goal / research question
+
+---
+
+class: left, middle
+
+# Background
+
+*
 
 ---
 
