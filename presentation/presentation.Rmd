@@ -25,7 +25,7 @@ library(xaringanthemer)
 library(broom)
 library(countrycode)
 library(RColorBrewer)
-library(tmap)
+#library(tmap)
 library(rgdal)
 library(leaflet)
 library("sf")
@@ -102,7 +102,7 @@ finaldf <- rename(finaldf, Country = `european_combined$Country`)
 
 ```{r add-geometry-to-df, include=FALSE}
 europe <- ne_countries(continent = 'europe', returnclass="sf")
-europe_map_df<- inner_join(finaldf, europe, by = c("Country" = "name"))
+europe_map_df<- full_join(finaldf, europe, by = c("Country" = "name"))
 ```
 
 ```{r title-slide-settings, include = FALSE}
@@ -115,7 +115,10 @@ style_xaringan(
 class: center, middle
 
 ## Goal 
-### We seek to find correlations between countrie's Happiness scores and specific factors.
+### We seek to find correlations between countries' Happiness scores and specific factors.
+
+???
+- We sought to find correlations between countries' Happiness scores and specific factors such as family, percent GDP and healthcare spending on pharmaceutical drugs. 
 
 ---
 
@@ -123,13 +126,28 @@ class: left, middle
 
 # Background
 
-*
+* Two piece of information we are interested in: 
+  * World Happiness Report, a measurement of state of global happiness 
+  * Pharmaceutical drug spending, a potential contributing factor a nation’s happiness score
+
+
+???
+- world happiness report 
+- pharmaceutical drug
 
 ---
 
-class: inverse, center, middle
+class: center, middle
 
-# Section title
+# Hypotheses 
+
+* Non-western countries have higher family importance scores influencing happiness scores.
+* The higher the percent of drug spending on GDP, the higher the percent spent on pharmaceutical drugs in healthcare.
+* The higher the percent GDP spending on pharmaceuticals, the lower the happiness score of European countries.
+
+
+???
+- research has shown that non-western countries have higher collectivism values than western countries that tend to be more individualistic, thus, we hypothesize that non-western countries have higher family importance scores influencing happiness scores.
 
 ---
 
@@ -147,7 +165,7 @@ map <- ggplot(europe_map_df) +
        fill = "residuals") +
   xlim(-40, 50) +
   ylim(20, 85) +
-  scale_fill_distiller(palette = "Spectral")
+  scale_fill_distiller(palette = "Spectral", na.value = "white")
 
 ggplotly(map)
 ```
