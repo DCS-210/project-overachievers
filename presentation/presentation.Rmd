@@ -80,14 +80,14 @@ european_combined <- combined %>%
   filter(NonEU_EU != "Outside-Europe")
 ```
 
-```{r linear-regresssion-PC_GDP-Happiness-Score, include=FALSE}
+```{r linear-regresssion-PC-GDP-Happiness-Score, include=FALSE}
 gdp_happiness_correlation <- 
   linear_reg() %>%
   set_engine("lm") %>%
   fit(`Happiness Score` ~ PC_GDP + factor(NonEU_EU), data = european_combined)
 ```
 
-```{r, include=FALSE}
+```{r include=FALSE}
 augmented_fit_lm <- augment(gdp_happiness_correlation$fit)
 
 finaldf <- cbind(european_combined$Country, augmented_fit_lm )
@@ -178,7 +178,7 @@ european_combined %>%
     geom_smooth(method = "lm", 
               color = "yellow", 
               se = FALSE) + 
-    labs(title = "Pharmecutical Spending Percent of GDP and Happiness Scores", 
+    labs(title = "Pharmeceutical Spending Percent of GDP and Happiness Scores", 
          x = "Percent of GDP",
          y = "Happiness Score", 
          color = "EU vs. Non-EU Countries")
@@ -190,6 +190,7 @@ class: left, middle
 
 # Implications
 
+.pull-left[
 ```{r plotting-residuals}
 fit <- lm(`Happiness Score` ~ PC_GDP, data = european_combined) # fit the model
 european_combined$predicted <- predict(fit)   # Save the predicted values
@@ -205,8 +206,9 @@ ggplot(european_combined, aes(x = PC_GDP, y = `Happiness Score`)) +
 
 ### Code sourced from https://www.statology.org/residual-plot-r/
 ```
+]
 
-.pull-left[
+.pull-right[
 ```{r europe-map, echo=FALSE, warning=FALSE, out.height="30%", out.width="100%"}
 map <- ggplot(europe_map_df) +
   geom_sf(aes(fill = .std.resid, geometry = europe_map_df$geometry)) +
@@ -222,11 +224,42 @@ ggplotly(map)
 ```
 ]
 
-.pull-right[
-* some text goes here
-* more texts
-* texts
+???
+The greater our residual value, the greater the size of the point. The size of the point and the length of the vertical line from the regression line to the point are correlated. Green indicates a smaller residual value while red represents a much higher residual value. 
+
+---
+
+class: left, middle
+
+#Implication
+
+.pull-left[
+```{r, echo=FALSE, out.width=1050, fig.align='center', fig.cap="A map of Europe containing the schengen countries, EU and non-EU countries"}
+
+knitr::include_graphics("/cloud/project/presentation/img/schengen-countries-map-2020.png")
+
+```
 ]
+
+.pull-right[
+```{r europe-map, echo=FALSE, warning=FALSE, out.height="30%", out.width="100%"}
+map <- ggplot(europe_map_df) +
+  geom_sf(aes(fill = .std.resid, geometry = europe_map_df$geometry)) +
+  labs(title = "Happiness Score Residuals",
+       x = "Longitude",
+       y = "Latitude", 
+       fill = "residuals") +
+  xlim(-40, 50) +
+  ylim(20, 85) +
+  scale_fill_distiller(palette = "Spectral", na.value = "white")
+
+ggplotly(map)
+```
+]
+
+???
+Switzerland that is not in the EU has a much higher happiness score than what is expected. The other western european countries seem to also have a higher normalized residual score compared to other European regions. It seems that Northern Europe tends to have a lower normalized residual scores, along with Eastern Europe. 
+
 ---
 
 # Hello World
