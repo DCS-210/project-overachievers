@@ -10,7 +10,6 @@ library(openintro)
 
 
 ```{r create-EU-non_EU-vector}
-
 x <- c("non-EU", "non-EU", "EU", "non-EU", "EU", "EU", "EU", "EU", "Outside-Europe", "Outside-Europe", "EU", "EU", "EU", "Outside-Europe", "EU", "EU", "EU", "EU", "Outside-Europe", "EU", "EU", "EU", "EU", "non-EU", "EU", "EU", "EU", "EU", "EU")
 ```
 
@@ -25,6 +24,10 @@ combined %>%
 ```
 Within this combined data-set we have 21 countries out of the 27 that are currently a part of the European Union. For Non-EU European countries, we have only 4 out of 28. 
 
+```{r filtering-data-to-European-Countries }
+european_combined <- combined %>%
+  filter(NonEU_EU != "Outside-Europe")
+```
 
 ```{r examining-percent-GDP-and-Happiness-Score}
 european_combined %>%
@@ -34,10 +37,7 @@ european_combined %>%
          y = "Happiness Score", 
          title = "Pharmecutical Spending Percent of GDP and Happiness Scores")
 ```
-```{r filtering-data-to-European-Countries }
-european_combined <- combined %>%
-  filter(NonEU_EU != "Outside-Europe")
-```
+
 
 
 
@@ -49,9 +49,8 @@ gdp_happiness_correlation <-
   fit(`Happiness Score` ~ PC_GDP + factor(NonEU_EU), data = european_combined)
 gdp_happiness_correlation
 ```
-```{r r-squared-of-correlation}
-glance(gdp_happiness_correlation)$adj.r.squared
-```
+
+
 ```{r linear-regresssion-PC_GDP-Happiness-Score}
 gdp_happiness_correlation_interaction <- 
   linear_reg() %>%
@@ -64,19 +63,19 @@ gdp_happiness_correlation_interaction
 glance(gdp_happiness_correlation_interaction)$adj.r.squared
 ```
 
-
-
 ```{r plotting-with-line-of-best-fit}
 european_combined %>%
     ggplot(aes(x = PC_GDP, y = `Happiness Score`, color = NonEU_EU)) +
     geom_point() +
     geom_smooth(method = "lm", 
               color = "yellow", 
-              se = FALSE)
-    labs(x = "Percent of GDP",
+              se = FALSE) + 
+    labs(title = "Pharmecutical Spending Percent of GDP and Happiness Scores", 
+         x = "Percent of GDP",
          y = "Happiness Score", 
-         title = "Pharmecutical Spending Percent of GDP and Happiness Scores")
+         color = "EU vs. Non-EU Countries")
 ```
+
 ```{r finding-linear-regression-GDP-Happiness-Score}
 GDP_happiness.lm = lm(`Happiness Score` ~ PC_GDP, data = european_combined) 
 GDP_Hapiness.res = resid(GDP_happiness.lm)

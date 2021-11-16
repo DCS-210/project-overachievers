@@ -125,14 +125,15 @@ class: left, middle
 
 # Background
 
-* Two piece of information we are interested in: 
+* Two pieces of information we are interested in: 
   * World Happiness Report, a measurement of state of global happiness 
   * Pharmaceutical drug spending, a potential contributing factor a nation’s happiness score
+  * Both were pulled from kaggle.com
 
 
 ???
-- world happiness report 
-- pharmaceutical drug
+- The World Happiness Report measures the state of global happiness using a survey where respondents rate their own lives based on different factors and was availible at kaggle.com. This includes family, freedom, health, economy and trust towards the government. This report is important because since it first came out in 2012, it gained global recognition from governments, organizations and civil society and has been administered every year since. The measurements of well-being could potentially be used to assess the progress of a nation, informing their  policy-making decisions from happiness indicators measured in the report. 
+- In addition, we are interested in taking in other factors that could possibly contribute to the happiness score outside the indicators that the world happiness report currently collects. We found a dataset (from kaggle.com) on the pharmaceutical drug spending by countries with respect to the GDP and the total healthcare spending in a specific year. We are intersted in the potential relationships between pharmecuitical spending and the happiness report data. 
 
 ---
 
@@ -150,9 +151,60 @@ class: center, middle
 
 ---
 
+class: center, middle
+
+* We ran a linear regression to see the potential relationship between percent of GPD (spending on pharmaceuticals) and Happiness Scores. 
+* The linear regression line found was: 
+happiness score = 8.368 - 1.423(Percent GDP)
+* The adjusted r-squared was 0.38 meaning that 38% of the variance of the happiness scores were explained by the variance of the percent spending of GDP. 
+* This at least shows preliminary evidence for accepting our hypothesis that the higher the percent GDP spending on pharmaceuticals, the lower the happiness score of European countries.
+```{r linear-regresssion-PC_GDP-Happiness-Score, include = FALSE}
+gdp_happiness <- 
+  linear_reg() %>%
+  set_engine("lm") %>%
+  fit(`Happiness Score` ~ PC_GDP, data = european_combined)
+gdp_happiness
+```
+
+```{r squared-of-correlation-interaction, include = FALSE}
+glance(gdp_happiness)$adj.r.squared
+```
+
+
+```{r plotting-with-line-of-best-fit}
+european_combined %>%
+    ggplot(aes(x = PC_GDP, y = `Happiness Score`, color = NonEU_EU)) +
+    geom_point() +
+    geom_smooth(method = "lm", 
+              color = "yellow", 
+              se = FALSE) + 
+    labs(title = "Pharmecutical Spending Percent of GDP and Happiness Scores", 
+         x = "Percent of GDP",
+         y = "Happiness Score", 
+         color = "EU vs. Non-EU Countries")
+```
+
+
+--- 
 class: left, middle
 
 # Implications
+
+```{r plotting-residuals}
+fit <- lm(`Happiness Score` ~ PC_GDP, data = european_combined) # fit the model
+european_combined$predicted <- predict(fit)   # Save the predicted values
+european_combined$residuals <- residuals(fit) # Save the residual values
+ggplot(european_combined, aes(x = PC_GDP, y = `Happiness Score`)) +
+  geom_smooth(method = "lm", se = FALSE, color = "lightgrey") +     # regression line  
+  geom_segment(aes(xend = PC_GDP, yend = predicted), alpha = .2) +      # draw line from point to line
+  geom_point(aes(color = abs(residuals), size = abs(residuals))) +  # size of the points
+  scale_color_continuous(low = "green", high = "red") +             # colour of the points mapped to residual size - green smaller, red larger
+  guides(color = FALSE, size = FALSE) +                             # Size legend removed
+  geom_point(aes(y = predicted), shape = 1) +
+  theme_bw()
+
+### Code sourced from https://www.statology.org/residual-plot-r/
+```
 
 .pull-left[
 ```{r europe-map, echo=FALSE, warning=FALSE, out.height="30%", out.width="100%"}
