@@ -106,7 +106,7 @@ europe_map_df<- full_join(finaldf, europe, by = c("Country" = "name"))
 
 ```{r title-slide-settings, include = FALSE}
 style_xaringan(
-  title_slide_background_image = "img/happiness.jpeg",
+  title_slide_background_image = "../presentation/img/true_happiness.png",
   title_slide_text_color = "#000"
 )
 ```
