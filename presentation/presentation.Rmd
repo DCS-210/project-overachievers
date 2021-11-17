@@ -433,7 +433,7 @@ class: left, middle
 # Implication
 
 .pull-left[
-```{r plotting-residuals, echo=FALSE, warning=FALSE, out.height="30%", out.width="100%"}
+```{r plotting-residuals, echo=FALSE, message = FALSE, warning=FALSE, out.height="30%", out.width="100%"}
 fit <- lm(`Happiness Score` ~ PC_GDP, data = european_combined) # fit the model
 european_combined$predicted <- predict(fit)   # Save the predicted values
 european_combined$residuals <- residuals(fit) # Save the residual values
@@ -450,6 +450,7 @@ ggplot(european_combined, aes(x = PC_GDP, y = `Happiness Score`)) +
   # Size legend removed
   guides(color = FALSE, size = FALSE) +                           
   geom_point(aes(y = predicted), shape = 1) +
+  geom_text(aes(label=Country),hjust=0, vjust=0.5, size = 3) +
   theme_bw() + 
   labs(x = "Percent of Drug Spending as a Share of GDP",
        y = "Happiness Score", 
