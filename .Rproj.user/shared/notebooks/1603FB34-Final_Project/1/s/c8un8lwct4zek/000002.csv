@@ -1,0 +1,14 @@
+"0","library(tidyverse)"
+"0","library(broom)"
+"0","library(countrycode)"
+"0","library(RColorBrewer)"
+"0","library(tmap)"
+"2","Registered S3 method overwritten by 'htmlwidgets':
+  method           from         
+  print.htmlwidget tools:rstudio
+"
+"2","Registered S3 methods overwritten by 'stars':
+  method             from
+  st_bbox.SpatRaster sf  
+  st_crs.SpatRaster  sf  
+"

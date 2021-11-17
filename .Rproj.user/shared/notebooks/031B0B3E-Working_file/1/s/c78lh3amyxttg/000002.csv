@@ -1,0 +1,2 @@
+"0","drug_spending2015EU <- drug_spending2015 %>%"
+"0","                        filter(Continent == ""Europe"")"

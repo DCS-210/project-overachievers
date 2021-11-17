@@ -1,0 +1,2 @@
+"0","europe <- ne_countries(continent = 'europe', returnclass=""sf"")"
+"0","europe_map_df<- full_join(finaldf, europe, by = c(""Country"" = ""sovereignt""))"

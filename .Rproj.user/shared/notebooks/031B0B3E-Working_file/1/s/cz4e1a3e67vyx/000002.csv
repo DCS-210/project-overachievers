@@ -1,0 +1,18 @@
+"0","modelEU <- lm(PC_HEALTHXP ~ PC_GDP, data=drug_spending2015EU)"
+"0","residEU <- resid(modelEU)"
+"0","predictEU <- predict(modelEU)"
+"0",""
+"0","drug_spending2015EU %>%"
+"0","  ggplot(aes(x = PC_GDP, y = PC_HEALTHXP)) +"
+"0","  geom_smooth(method = ""lm"", se = FALSE, color = ""lightgrey"") +     # regression line  "
+"0","  geom_segment(aes(xend = PC_GDP, yend = predictEU), alpha = .2) +      # draw line from point to line"
+"0","  geom_point(aes(color = abs(residEU), size = abs(residEU))) +  # size of the points"
+"0","  scale_color_continuous(low = ""green"", high = ""red"") + "
+"0","  guides(color = FALSE, size = FALSE) +                             # Size legend removed"
+"0","  geom_point(aes(y = predictEU), shape = 1) +"
+"0","  theme_bw()"
+"2","Warning:"
+"2"," `guides(<scale> = FALSE)` is deprecated. Please use `guides(<scale> = ""none"")` instead.
+"
+"2","`geom_smooth()` using formula 'y ~ x'
+"

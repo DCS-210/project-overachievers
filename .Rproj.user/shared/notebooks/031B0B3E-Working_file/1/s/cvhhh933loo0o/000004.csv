@@ -1,0 +1,8 @@
+"0","drug_spending %>%"
+"0","    #drop_na(PC_GDP) %>%"
+"0","    ggplot(aes(x = TIME, y = PC_GDP, colour = Country)) +"
+"0","    geom_jitter() +"
+"0","    facet_wrap(~Continent) +"
+"0","    labs(x = ""Year"","
+"0","         y = ""Percent of drug spending based on GDP"", "
+"0","        title = ""Total spending on pharmaceutical drugs by countries"")"

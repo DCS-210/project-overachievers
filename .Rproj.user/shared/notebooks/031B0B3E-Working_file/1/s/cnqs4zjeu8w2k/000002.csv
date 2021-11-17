@@ -1,0 +1,3 @@
+"0","drug_spending <- drug_spending %>%"
+"0","  mutate(Country = countrycode(LOCATION, ""iso3c"", ""country.name"")) %>%"
+"0","  mutate(Continent = countrycode(LOCATION, ""iso3c"", ""continent""))"

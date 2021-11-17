@@ -1,0 +1,11 @@
+"0","library(tidyverse)"
+"0","library(broom)"
+"0","library(countrycode)"
+"0","library(tidymodels)"
+"0","library(openintro)"
+"2","Loading required package: airports
+"
+"2","Loading required package: cherryblossom
+"
+"2","Loading required package: usdata
+"

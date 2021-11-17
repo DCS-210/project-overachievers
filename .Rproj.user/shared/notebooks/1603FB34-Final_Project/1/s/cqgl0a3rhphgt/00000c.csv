@@ -1,0 +1,6 @@
+"0","gdp_happiness_correlation <- "
+"0","  linear_reg() %>%"
+"0","  set_engine(""lm"") %>%"
+"0","  fit(`Happiness Score` ~ PC_GDP + factor(NonEU_EU), data = european_combined) %>%"
+"0","  tidy()"
+"0","gdp_happiness_correlation"

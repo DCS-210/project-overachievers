@@ -135,7 +135,7 @@ a, a > code {
 }
 .title-slide {
   background-color: var(--title-slide-background-color);
-  background-image: url("img/happiness.jpeg");
+  background-image: url("../presentation/img/over.png");
   background-size: cover;
 }
 .title-slide .remark-slide-number {

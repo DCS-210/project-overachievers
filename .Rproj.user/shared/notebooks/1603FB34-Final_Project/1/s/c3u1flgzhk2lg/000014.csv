@@ -1,0 +1,3 @@
+"0",""
+"0","finaldf <- cbind(european_combined$Country, augmented_fit_lm )"
+"0","finaldf"

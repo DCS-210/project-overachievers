@@ -1,0 +1,13 @@
+"0","drug_spending %>%"
+"0","    drop_na(PC_GDP) %>%"
+"0","    ggplot(aes(x = TIME, y = PC_GDP)) +"
+"0","    geom_line() +"
+"0","    # calculate the mean of y"
+"0","    stat_summary(fun.y = ""mean"", colour = ""red"", size = 1, geom = ""line"") + "
+"0","    facet_wrap(~Continent) +"
+"0","    labs(x = ""Year"","
+"0","         y = ""Percent of drug spending GDP"", "
+"0","        title = ""Total spending on pharmaceutical drugs by countries"")"
+"2","Warning:"
+"2"," `fun.y` is deprecated. Use `fun` instead.
+"

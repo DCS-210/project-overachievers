@@ -1,0 +1,10 @@
+"0","happiness$Country_title = str_to_title(happiness$Country)"
+"0",""
+"0","happiness %>%"
+"0","  mutate(Continent = countrycode(Country_title, ""country.name"", ""continent""))"
+"2","Warning:"
+"2"," Problem with `mutate()` column `Continent`.
+[34mℹ[39m `Continent = countrycode(Country_title, ""country.name"", ""continent"")`.
+[34mℹ[39m Some values were not matched unambiguously: Kosovo
+
+"

@@ -1,0 +1,10 @@
+"0","ggplot(nonwestern_countries, aes(x = `Happiness Score`, y = Family)) +"
+"0","  geom_jitter(color = ""blue"") + "
+"0","  geom_smooth(method = ""lm"", "
+"0","              color = ""orange"", "
+"0","              se = FALSE) +"
+"0","  labs(title = ""Family and Happiness Score for non-western countries "","
+"0","       x = ""Happiness Score"","
+"0","       y = ""Family"")"
+"2","`geom_smooth()` using formula 'y ~ x'
+"

@@ -1,0 +1,8 @@
+"0","drug_spending %>%"
+"0","  drop_na(PC_HEALTHXP) %>%"
+"0","  group_by(Continent) %>%"
+"0","  summarise(min = min(PC_HEALTHXP), max = max(PC_HEALTHXP),"
+"0","            mean = mean(PC_HEALTHXP), med = median(PC_HEALTHXP),"
+"0","            sd = sd(PC_HEALTHXP), "
+"0","            q1 = quantile(PC_HEALTHXP, probs = 0.25),"
+"0","            q3 = quantile(PC_HEALTHXP, probs = 0.75))"

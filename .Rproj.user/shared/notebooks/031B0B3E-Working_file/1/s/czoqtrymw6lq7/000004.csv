@@ -1,0 +1,8 @@
+"0","drug_spending %>%"
+"0","   # drop_na(PC_HEALTHXP) %>%"
+"0","    filter(Continent == ""Oceania"") %>%"
+"0","    ggplot(aes(x = TIME, y = PC_GDP, colour = Country)) +"
+"0","    geom_line() +"
+"0","    labs(x = ""Year"","
+"0","         y = ""Percent of drug spending on GDP"", "
+"0","        title = ""Total spending on pharmaceutical drugs by countries"")"

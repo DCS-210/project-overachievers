@@ -1,0 +1,8 @@
+"0","drug_spending %>%"
+"0","    ggplot(aes(x = Continent, y = PC_HEALTHXP, fill = Continent)) +"
+"0","    geom_boxplot() +"
+"0","    #facet_wrap(~TIME) + "
+"0","    theme(legend.position = ""none"") +"
+"0","    labs(x = ""Continents"","
+"0","         y = ""Percent of drug spending on healthcare"", "
+"0","        title = ""xx"")"

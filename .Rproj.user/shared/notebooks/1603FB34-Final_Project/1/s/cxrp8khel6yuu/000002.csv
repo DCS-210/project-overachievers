@@ -1,0 +1,2 @@
+"0","european_combined <- combined %>%"
+"0","  filter(NonEU_EU != ""Outside-Europe"")"

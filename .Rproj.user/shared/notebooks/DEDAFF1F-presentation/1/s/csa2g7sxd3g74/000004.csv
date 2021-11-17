@@ -1,0 +1,7 @@
+"0","nonwestern_countries_lr <- "
+"0","  linear_reg() %>%"
+"0","  set_engine(""lm"") %>%"
+"0","  fit(`Happiness Score` ~ Family, data = nonwestern_countries) "
+"0","```"
+"2","Error: attempt to use zero-length variable name
+"

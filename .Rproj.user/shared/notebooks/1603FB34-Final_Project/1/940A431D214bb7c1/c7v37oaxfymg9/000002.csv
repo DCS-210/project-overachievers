@@ -1,0 +1,6 @@
+"0","drug_spending %>%"
+"0","    ggplot(aes(x = LOCATION, y = TOTAL_SPEND)) +"
+"0","    geom_jitter() +"
+"0","    labs(x = ""Countries"","
+"0","         y = ""Total spending on pharmaceutical drugs"", "
+"0","        title = ""Total spending on pharmaceutical drugs in 2015 by countries"")"
