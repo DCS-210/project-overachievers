@@ -111,6 +111,72 @@ style_xaringan(
 )
 ```
 
+```{r western-level, include = FALSE}
+happy2015 <- happy2015 %>%
+     mutate(western_level = case_when(Region %in% "Australia and New Zealand" ~ "Western",
+                                     Region %in% "Central and Eastern Europe" ~ "Western",
+                                     Region %in% "Eastern Asia" ~ "Non-Western",                                        Region %in% "Latin America and Caribbean" ~ "Western",
+                                     Region %in% "Middle East and Northern Africa" ~ "Non-Western",
+                                     Region %in% "North America" ~ "Western",
+                                     Region %in% "Southeastern Asia" ~ "Non-Western",
+                                     Region %in% "Southern Asia" ~ "Non-Western",
+                                     Region %in% "Sub-Saharan Africa" ~ "Non-Western",
+                                     Region %in% "Western Europe" ~ "Western",
+) )
+```
+
+
+```{r filter-western}
+western_countries <- filter(happy2015, western_level == "Western")
+western_countries
+nonwestern_countries <- filter(happy2015, western_level =="Non-Western")
+nonwestern_countries
+```
+
+```{r filter-AllEU}
+AllEUcountries <- 
+western_countries %>%
+filter( Region %in% c("Central and Eastern Europe","Western Europe"))
+AllEUcountries
+```
+
+```{r EU-status}
+AllEUcountries <- AllEUcountries %>%
+     mutate(EU_status = case_when(Country %in% "Austria" ~ "EU",
+                                     Country %in% "Belgium" ~ "EU",
+                                     Country %in% "Bulgaria" ~ "EU",
+                                     Country %in% "Croatia" ~ "EU",
+                                     Country %in% "Cyprus" ~ "EU",
+                                     Country %in% "Czech Republic" ~ "EU",
+                                     Country %in% "Denmark" ~ "EU",
+                                     Country %in% "Estonia" ~ "EU",      
+                                     Country %in% "Finland" ~ "EU",   
+                                     Country %in% "France" ~ "EU",            
+                                     Country %in% "Germany" ~ "EU",       
+                                     Country %in% "Greece" ~ "EU",                                                    Country %in% "Hungary" ~ "EU",
+                                     Country %in% "Ireland" ~ "EU",   
+                                     Country %in% "Italy" ~ "EU",    
+                                     Country %in% "Latvia" ~ "EU",                                                    Country %in% "Lithuania" ~ "EU", 
+                                     Country %in% "Luxembourg" ~ "EU", 
+                                     Country %in% "Malta" ~ "EU",  
+                                     Country %in% "Netherlands" ~ "EU",   
+                                     Country %in% "Poland" ~ "EU",       
+                                     Country %in% "Portugal" ~ "EU",  
+                                     Country %in% "Romania" ~ "EU",     
+                                     Country %in% "Slovakia" ~ "EU",  
+                                     Country %in% "Slovenia" ~ "EU",                                                  Country %in% "Spain" ~ "EU",     
+                                     Country %in% "Sweden" ~ "EU",   
+                                     TRUE ~ "Non-EU"
+) )
+```
+
+```{r filter-EU}
+CountriesEU <- filter(AllEUcountries, EU_status == "EU")
+CountriesEU 
+NonEUcountries <- filter(AllEUcountries, EU_status =="Non-EU")
+NonEUcountries
+```
+
 class: center, middle
 
 ## Goal 
@@ -152,7 +218,56 @@ class: center, middle
 ---
 
 class: center, middle
+* We ran a linear regression to see the potential relationship between the Family variable and Happiness Scores for western countries. 
+* The linear regression line found was: 
+Happiness score = 2.347 + 3.259(family)
+* The adjusted r-squared was 0.45 meaning that 45% of the variance of the happiness scores were explained by the variance of the Family variable. 
+```{r plotting-linear-regression-line}
+ggplot(western_countries, aes(x = `Happiness Score`, y = Family)) +
+  geom_jitter(color = "blue") +
+  geom_smooth(method = "lm", 
+              color = "orange", 
+              se = FALSE) +
+  labs(title = "Family and Happiness Score for Western Countries ",
+       x = "Happiness Score",
+       y = "Family")
 
+western_countries_lr <- 
+  linear_reg() %>%
+  set_engine("lm") %>%
+  fit(`Happiness Score` ~ Family, data = western_countries) 
+```
+
+---
+class: center, middle
+* Similarly, we ran a linear regression to see the potential relationship between the Family variable and Happiness Scores for non-western countries. 
+* The linear regression line found was: 
+Happiness score = 2.819 + 2.257(family)
+* The adjusted r-squared was 0.39 meaning that 39% of the variance of the happiness scores were explained by the variance of the Family variable. 
+```{r plotting-linear-regression-nonwestern} 
+ggplot(nonwestern_countries, aes(x = `Happiness Score`, y = Family)) +
+  geom_jitter(color = "blue") + 
+  geom_smooth(method = "lm", 
+              color = "orange", 
+              se = FALSE) +
+  labs(title = "Family and Happiness Score for non-western countries ",
+       x = "Happiness Score",
+       y = "Family")
+
+nonwestern_countries_lr <- 
+  linear_reg() %>%
+  set_engine("lm") %>%
+  fit(`Happiness Score` ~ Family, data = nonwestern_countries) 
+```
+---
+
+class: center, middle
+
+
+
+---
+
+class: center, middle
 * We ran a linear regression to see the potential relationship between percent of GPD (spending on pharmaceuticals) and Happiness Scores. 
 * The linear regression line found was: 
 happiness score = 8.368 - 1.423(Percent GDP)
