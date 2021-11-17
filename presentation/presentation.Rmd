@@ -244,6 +244,7 @@ class: center, middle
 * The linear regression line found was: 
 Happiness score = 2.819 + 2.257(family)
 * The adjusted r-squared was 0.39 meaning that 39% of the variance of the happiness scores were explained by the variance of the Family variable. 
+*This refutes our hypothesis. 
 ```{r plotting-linear-regression-nonwestern} 
 ggplot(nonwestern_countries, aes(x = `Happiness Score`, y = Family)) +
   geom_jitter(color = "blue") + 
@@ -263,11 +264,53 @@ nonwestern_countries_lr <-
 
 class: center, middle
 
+* We then looked into a linear regression to see the potential relationship between the Family variable and Happiness Scores for European countries. We broke it down into 2 parts: EU countries and non-EU countries. 
+* The linear regression line for EU countries found was: 
+Happiness score = 2.451 + 2.299(family)
+* The adjusted r-squared was 0.68 meaning that 68% of the variance of the happiness scores were explained by the variance of the Family variable.
+```{r plotting-linear-regression-EU}
+ggplot(CountriesEU, aes(x = `Happiness Score`, y = Family)) +
+  geom_jitter(color = "blue") +
+  geom_smooth(method = "lm", 
+              color = "orange", 
+              se = FALSE) +
+  labs(title = "Family and Happiness Score for EU countries ",
+       x = "Happiness Score",
+       y = "Family")
 
+CountriesEU_lr <- 
+  linear_reg() %>%
+  set_engine("lm") %>%
+  fit(`Happiness Score` ~ Family, data = CountriesEU) 
+```
+
+---
+
+* We performed the same analysis for European countries which are not part of the EU.
+* The linear regression line for these countries found was found to be the same as EU countries: 
+Happiness score = 2.451 + 2.299(family)
+* This did not add to our hypothesis. 
+
+```{r plotting-linear-regression-nonEU}
+ggplot(NonEUcountries, aes(x = `Happiness Score`, y = Family)) +
+  geom_jitter(color = "blue") +
+  geom_smooth(method = "lm", 
+              color = "orange", 
+              se = FALSE) +
+  labs(title = "Family and Happiness Score for non-EU countries ",
+       x = "Happiness Score",
+       y = "Family")
+
+NonEUcountries_lr <- 
+  linear_reg() %>%
+  set_engine("lm") %>%
+  fit(`Happiness Score` ~ Family, data = NonEUcountries) 
+```
 
 ---
 
 class: center, middle
+
 * We ran a linear regression to see the potential relationship between percent of GPD (spending on pharmaceuticals) and Happiness Scores. 
 * The linear regression line found was: 
 happiness score = 8.368 - 1.423(Percent GDP)
