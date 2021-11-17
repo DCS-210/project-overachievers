@@ -104,14 +104,9 @@ europe <- ne_countries(continent = 'europe', returnclass="sf")
 europe_map_df<- full_join(finaldf, europe, by = c("Country" = "name"))
 ```
 
-background-image: url(../presentation/img/true_happiness.png)
-background-position: top right
-background-size: contain
-class: middle, left
-
 ```{r title-slide-settings, include = FALSE}
 style_xaringan(
-  title_slide_background_image = "../presentation/img/true_happiness.png",
+  title_slide_background_image = "../presentation/img/over.png",
   title_slide_text_color = "#000"
 )
 ```
