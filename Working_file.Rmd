@@ -181,7 +181,6 @@ drug_spending2015 <- drug_spending %>%
 ```
 
 ```{r finding-GDP-healthXP-in-Europe-2015}
-#png(file="/cloud/project/presentation/img/GDP_healthXP_Europe2015.png", width=600, height=350)
 drug_spending2015 %>%
     filter(Continent == "Europe") %>%
     ggplot(aes(x = PC_GDP, y = PC_HEALTHXP, colour = Country)) +
@@ -190,12 +189,10 @@ drug_spending2015 %>%
               color = "black",
               size = 0.3,
               se = FALSE) +
-    #facet_wrap(~Continent, nrow = 3) +
     labs(x = "Percent of Drug Spending on GDP",
          y = "Percent of Drug Spending on Total Healthcare Spending", 
         title = "Pharmaceutical Drug Spending As A Share of Total Healthcare Spending & GDP",
         subtitle = "in European Countries")
-#dev.off()
 ```
 
 

@@ -112,7 +112,7 @@ style_xaringan(
 ```
 
 ```{r western-level, include = FALSE}
-happy2015 <- happy2015 %>%
+happy2015 <- happiness %>%
      mutate(western_level = case_when(Region %in% "Australia and New Zealand" ~ "Western",
                                      Region %in% "Central and Eastern Europe" ~ "Western",
                                      Region %in% "Eastern Asia" ~ "Non-Western",                                        Region %in% "Latin America and Caribbean" ~ "Western",
@@ -126,21 +126,21 @@ happy2015 <- happy2015 %>%
 ```
 
 
-```{r filter-western}
+```{r filter-western, include=FALSE}
 western_countries <- filter(happy2015, western_level == "Western")
 western_countries
 nonwestern_countries <- filter(happy2015, western_level =="Non-Western")
 nonwestern_countries
 ```
 
-```{r filter-AllEU}
+```{r filter-AllEU, include=FALSE}
 AllEUcountries <- 
 western_countries %>%
 filter( Region %in% c("Central and Eastern Europe","Western Europe"))
 AllEUcountries
 ```
 
-```{r EU-status}
+```{r EU-status, include=FALSE}
 AllEUcountries <- AllEUcountries %>%
      mutate(EU_status = case_when(Country %in% "Austria" ~ "EU",
                                      Country %in% "Belgium" ~ "EU",
@@ -170,17 +170,18 @@ AllEUcountries <- AllEUcountries %>%
 ) )
 ```
 
-```{r filter-EU}
+```{r filter-EU, include=FALSE}
 CountriesEU <- filter(AllEUcountries, EU_status == "EU")
 CountriesEU 
 NonEUcountries <- filter(AllEUcountries, EU_status =="Non-EU")
 NonEUcountries
 ```
 
+
 class: center, middle
 
 ## Goal 
-### We seek to find correlations between countries' Happiness scores and specific factors.
+### We seek to find correlations between countries' Happiness scores and specific factors such as family, percent GDP and healthcare spending on pharmaceutical drugs.
 
 ???
 - We sought to find correlations between countries' Happiness scores and specific factors such as family, percent GDP and healthcare spending on pharmaceutical drugs. 
@@ -192,9 +193,22 @@ class: left, middle
 # Background
 
 * Two pieces of information we are interested in: 
+
   * World Happiness Report, a measurement of state of global happiness 
+  
   * Pharmaceutical drug spending, a potential contributing factor a nation’s happiness score
+  
   * Both were pulled from kaggle.com
+
+```{r, echo=FALSE, out.width="100%", fig.align='left'}
+
+knitr::include_graphics("../presentation/img/happy-pic.png")
+```
+
+```{r, echo=FALSE, out.width="100%", fig.align='right'}
+
+knitr::include_graphics("../presentation/img/drug-pic.jpg")
+```
 
 
 ???
@@ -208,7 +222,9 @@ class: center, middle
 # Hypotheses 
 
 * Non-western countries have higher family importance scores influencing happiness scores.
+
 * The higher the percent of drug spending on GDP, the higher the percent spent on pharmaceutical drugs in healthcare.
+
 * The higher the percent GDP spending on pharmaceuticals, the lower the happiness score of European countries.
 
 
@@ -217,12 +233,21 @@ class: center, middle
 
 ---
 
-class: center, middle
+class: left, middle
+
+### Family Effect on Happiness Scores for Western Countries
+
+.pull-left[
 * We ran a linear regression to see the potential relationship between the Family variable and Happiness Scores for western countries. 
+
 * The linear regression line found was: 
 Happiness score = 2.347 + 3.259(family)
+
 * The adjusted r-squared was 0.45 meaning that 45% of the variance of the happiness scores were explained by the variance of the Family variable. 
-```{r plotting-linear-regression-line}
+]
+
+.pull-right[
+```{r plotting-linear-regression-line, echo= FALSE, out.width = "100%"}
 ggplot(western_countries, aes(x = `Happiness Score`, y = Family)) +
   geom_jitter(color = "blue") +
   geom_smooth(method = "lm", 
@@ -237,21 +262,33 @@ western_countries_lr <-
   set_engine("lm") %>%
   fit(`Happiness Score` ~ Family, data = western_countries) 
 ```
+]
 
 ---
-class: center, middle
+
+class: left, middle
+
+### Family Effect on Happiness Scores for Non-Western Countries
+
+.pull-left[
 * Similarly, we ran a linear regression to see the potential relationship between the Family variable and Happiness Scores for non-western countries. 
+
 * The linear regression line found was: 
 Happiness score = 2.819 + 2.257(family)
+
 * The adjusted r-squared was 0.39 meaning that 39% of the variance of the happiness scores were explained by the variance of the Family variable. 
+
 *This refutes our hypothesis. 
-```{r plotting-linear-regression-nonwestern} 
+]
+
+.pull-right[
+```{r plotting-linear-regression-nonwestern, echo = FALSE, out.width = "100%"} 
 ggplot(nonwestern_countries, aes(x = `Happiness Score`, y = Family)) +
   geom_jitter(color = "blue") + 
   geom_smooth(method = "lm", 
               color = "orange", 
               se = FALSE) +
-  labs(title = "Family and Happiness Score for non-western countries ",
+  labs(title = "Family and Happiness Score for Non-Western Countries ",
        x = "Happiness Score",
        y = "Family")
 
@@ -260,15 +297,25 @@ nonwestern_countries_lr <-
   set_engine("lm") %>%
   fit(`Happiness Score` ~ Family, data = nonwestern_countries) 
 ```
+]
+
 ---
 
-class: center, middle
+class: left, left
 
+### Relationship Between Family and Happiness Score for EU Countries
+
+.pull-left[
 * We then looked into a linear regression to see the potential relationship between the Family variable and Happiness Scores for European countries. We broke it down into 2 parts: EU countries and non-EU countries. 
+
 * The linear regression line for EU countries found was: 
 Happiness score = 2.451 + 2.299(family)
+
 * The adjusted r-squared was 0.68 meaning that 68% of the variance of the happiness scores were explained by the variance of the Family variable.
-```{r plotting-linear-regression-EU}
+]
+
+.pull-right[
+```{r plotting-linear-regression-EU, echo = FALSE, out.width = "100%"}
 ggplot(CountriesEU, aes(x = `Happiness Score`, y = Family)) +
   geom_jitter(color = "blue") +
   geom_smooth(method = "lm", 
@@ -283,21 +330,29 @@ CountriesEU_lr <-
   set_engine("lm") %>%
   fit(`Happiness Score` ~ Family, data = CountriesEU) 
 ```
+]
 
 ---
 
+### Relationship Between Family and Happiness Score for Non-EU Countries
+
+.pull-left[
 * We performed the same analysis for European countries which are not part of the EU.
+
 * The linear regression line for these countries found was found to be the same as EU countries: 
 Happiness score = 2.451 + 2.299(family)
-* This did not add to our hypothesis. 
 
-```{r plotting-linear-regression-nonEU}
+* This did not add to our hypothesis. 
+]
+
+.pull-right[
+```{r plotting-linear-regression-nonEU, echo = FALSE, out.width = "100%"}
 ggplot(NonEUcountries, aes(x = `Happiness Score`, y = Family)) +
   geom_jitter(color = "blue") +
   geom_smooth(method = "lm", 
               color = "orange", 
               se = FALSE) +
-  labs(title = "Family and Happiness Score for non-EU countries ",
+  labs(title = "Family and Happiness Score for Non-EU Countries ",
        x = "Happiness Score",
        y = "Family")
 
@@ -306,16 +361,35 @@ NonEUcountries_lr <-
   set_engine("lm") %>%
   fit(`Happiness Score` ~ Family, data = NonEUcountries) 
 ```
+]
 
 ---
 
-class: center, middle
+class: left, left
 
-* We ran a linear regression to see the potential relationship between percent of GPD (spending on pharmaceuticals) and Happiness Scores. 
-* The linear regression line found was: 
-happiness score = 8.368 - 1.423(Percent GDP)
-* The adjusted r-squared was 0.38 meaning that 38% of the variance of the happiness scores were explained by the variance of the percent spending of GDP. 
-* This at least shows preliminary evidence for accepting our hypothesis that the higher the percent GDP spending on pharmaceuticals, the lower the happiness score of European countries.
+### The higher the percent of drug spending on GDP, the higher the percent spent on pharmaceutical drugs in healthcare
+
+```{r finding-GDP-healthXP-in-Europe-2015, echo=FALSE}
+drug_spending %>%
+    filter(Continent == "Europe") %>%
+    ggplot(aes(x = PC_GDP, y = PC_HEALTHXP, colour = Country)) +
+    geom_point() +
+    geom_smooth(method = "lm", 
+              color = "black",
+              size = 0.3,
+              se = FALSE) +
+    labs(x = "Percent of Drug Spending on GDP",
+         y = "Percent of Drug Spending on Total Healthcare Spending", 
+        title = "Pharmaceutical Drug Spending As A Share of Total Healthcare Spending & GDP",
+        subtitle = "in European Countries")
+```
+
+---
+
+class: left, middle
+
+### Percent GDP (Pharmaceutical Spending) on Countries' Happiness Scores
+
 ```{r linear-regresssion-PC_GDP-Happiness-Score, include = FALSE}
 gdp_happiness <- 
   linear_reg() %>%
@@ -328,8 +402,8 @@ gdp_happiness
 glance(gdp_happiness)$adj.r.squared
 ```
 
-
-```{r plotting-with-line-of-best-fit}
+.pull-left[
+```{r plotting-with-line-of-best-fit, echo = FALSE, out.width = "100%"}
 european_combined %>%
     ggplot(aes(x = PC_GDP, y = `Happiness Score`, color = NonEU_EU)) +
     geom_point() +
@@ -341,26 +415,49 @@ european_combined %>%
          y = "Happiness Score", 
          color = "EU vs. Non-EU Countries")
 ```
+]
+
+.pull-right[
+* We ran a linear regression to see the potential relationship between percent of GPD (spending on pharmaceuticals) and Happiness Scores. 
+
+* The linear regression line found was: 
+happiness score = 8.368 - 1.423(Percent GDP)
+
+* The adjusted r-squared was 0.38 meaning that 38% of the variance of the happiness scores were explained by the variance of the percent spending of GDP. 
+
+* This at least shows preliminary evidence for accepting our hypothesis that the higher the percent GDP spending on pharmaceuticals, the lower the happiness score of European countries.
+]
 
 
 --- 
+---
 class: left, middle
 
-# Implications
+# Implication
 
 .pull-left[
-```{r plotting-residuals}
+```{r plotting-residuals, echo=FALSE, warning=FALSE, out.height="30%", out.width="100%"}
 fit <- lm(`Happiness Score` ~ PC_GDP, data = european_combined) # fit the model
 european_combined$predicted <- predict(fit)   # Save the predicted values
 european_combined$residuals <- residuals(fit) # Save the residual values
+          
 ggplot(european_combined, aes(x = PC_GDP, y = `Happiness Score`)) +
-  geom_smooth(method = "lm", se = FALSE, color = "lightgrey") +     # regression line  
-  geom_segment(aes(xend = PC_GDP, yend = predicted), alpha = .2) +      # draw line from point to line
-  geom_point(aes(color = abs(residuals), size = abs(residuals))) +  # size of the points
-  scale_color_continuous(low = "green", high = "red") +             # colour of the points mapped to residual size - green smaller, red larger
-  guides(color = FALSE, size = FALSE) +                             # Size legend removed
+  # regression line
+  geom_smooth(method = "lm", se = FALSE, color = "lightgrey") +   
+  # draw line from point to line  
+  geom_segment(aes(xend = PC_GDP, yend = predicted), alpha = .2) +
+  # size of the points
+  geom_point(aes(color = abs(residuals), size = abs(residuals))) +
+  # colour of the points mapped to residual size - green smaller, red larger
+  scale_color_continuous(low = "green", high = "red") +
+  # Size legend removed
+  guides(color = FALSE, size = FALSE) +                           
   geom_point(aes(y = predicted), shape = 1) +
-  theme_bw()
+  theme_bw() + 
+  labs(x = "Percent of Drug Spending as a Share of GDP",
+       y = "Happiness Score", 
+       title = "The Residual Plot for Happiness Score vs. 
+                Percent Drug Spending as a Share of GDP")
 
 ### Code sourced from https://www.statology.org/residual-plot-r/
 ```
@@ -370,10 +467,10 @@ ggplot(european_combined, aes(x = PC_GDP, y = `Happiness Score`)) +
 ```{r europe-map, echo=FALSE, warning=FALSE, out.height="30%", out.width="100%"}
 map <- ggplot(europe_map_df) +
   geom_sf(aes(fill = .std.resid, geometry = europe_map_df$geometry)) +
-  labs(title = "Happiness Score Residuals",
+  labs(title = "Happiness Score vs. Residual Values in Europe",
        x = "Longitude",
        y = "Latitude", 
-       fill = "residuals") +
+       fill = "Residual Values") +
   xlim(-40, 50) +
   ylim(20, 85) +
   scale_fill_distiller(palette = "Spectral", na.value = "white")
@@ -394,19 +491,19 @@ class: left, middle
 .pull-left[
 ```{r, echo=FALSE, out.width=1050, fig.align='center', fig.cap="A map of Europe containing the schengen countries, EU and non-EU countries"}
 
-knitr::include_graphics("/cloud/project/presentation/img/schengen-countries-map-2020.png")
+knitr::include_graphics("../presentation/img/schengen-countries-map-2020.png")
 
 ```
 ]
 
 .pull-right[
-```{r europe-map, echo=FALSE, warning=FALSE, out.height="30%", out.width="100%"}
+```{r europe-map-2, echo=FALSE, warning=FALSE, out.height="30%", out.width="100%"}
 map <- ggplot(europe_map_df) +
   geom_sf(aes(fill = .std.resid, geometry = europe_map_df$geometry)) +
-  labs(title = "Happiness Score Residuals",
+  labs(title = "Happiness Score vs. Residual Values in Europe",
        x = "Longitude",
        y = "Latitude", 
-       fill = "residuals") +
+       fill = "Residual Values") +
   xlim(-40, 50) +
   ylim(20, 85) +
   scale_fill_distiller(palette = "Spectral", na.value = "white")
@@ -420,152 +517,11 @@ Switzerland that is not in the EU has a much higher happiness score than what is
 
 ---
 
-# Hello World
+class: left, middle
 
-- Click the `Knit` button to compile your presentation
+# Limitations and Future Study  
 
-- Make sure to commit and push all resulting files to your GitHub repo
+* The merged data set is not a full representation of the world (as there were many countries missing from most continents besides Europe). 
+* Happiness is such a hard variable to measure, therefore it is hard to conclude how much GDP spending on pharmaceuticals impacted Happiness Scores
+* Correlation does not equal causation. 
 
----
-
-class: inverse, middle, center
-
-# Using xaringan
-
----
-
-# xaringan
-
-- The presentation is created using the `xaringan` package
-
-- Use `---` to separate slides and `--` for incremental builds
-
---
-
-- Like this
-
----
-
-# Layouts
-
-You can use plain text
-
-- or bullet points
-
-.pull-left[
-or text in two columns $^*$
-]
-.pull-right[
-- like
-- this
-]
-
-.footnote[
-[*] And add footnotes
-]
-
----
-
-# Code
-
-```{r boring-regression}
-# a boring regression
-model <- lm(dist ~ speed, data = cars)
-tidy(model)
-glance(model)
-```
-
----
-
-# Plots
-
-```{r recode-species, echo = FALSE}
-# In this chunk I'm doing a bunch of analysis that I don't want to present 
-# in my slides. But I need the resulting data frame for a plot I want to present.
-iris_modified <- iris %>%
-  mutate(Species = fct_other(Species, keep = "setosa"))
-```
-
-```{r plot-iris, echo = FALSE}
-# Code hidden with echo = FALSE
-# Uses modified iris dataset from previous chunk
-# Play around with height and width until you're happy with the look
-ggplot(data = iris_modified, mapping = aes(x = Sepal.Width, y = Sepal.Length, color = Species)) +
-  geom_point() + 
-  theme_minimal() # theme options: https://ggplot2.tidyverse.org/reference/ggtheme.html
-```
-
----
-
-## Plot and text
-
-.pull-left[
-- Some text
-- goes here
-]
-.pull-right[
-```{r warning=FALSE, out.width="100%", fig.width=4, echo=FALSE}
-# see how I changed out.width and fig.width from defaults
-# to make the figure bigger
-ggplot(penguins, aes(x = bill_length_mm, y = species, color = species)) +
-  geom_boxplot() +
-  theme_minimal()
-```
-]
-
----
-
-# Tables
-
-If you want to generate a table, make sure it is in the HTML format (instead of Markdown or other formats), e.g.,
-
-```{r iris-table, echo = FALSE}
-kable(head(iris), format = "html")
-```
-
----
-
-# Images
-
-```{r castle, echo = FALSE, out.width = "60%", fig.align = "center", fig.cap = "Image credit: Photo by Jörg Angeli on Unsplash."}
-include_graphics("https://images.unsplash.com/photo-1535448033526-c0e85c9e6968?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1650&q=80")
-```
-
-Or you can also include a full page image. See next slide.
-
----
-
-background-image: url(https://images.unsplash.com/photo-1535448033526-c0e85c9e6968?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1650&q=80)
-
----
-
-# Math Expressions
-
-You can write LaTeX math expressions inside a pair of dollar signs, e.g. &#36;\alpha+\beta$ renders $\alpha+\beta$. You can use the display style with double dollar signs:
-
-```
-$$\bar{X}=\frac{1}{n}\sum_{i=1}^nX_i$$
-```
-
-$$\bar{X}=\frac{1}{n}\sum_{i=1}^nX_i$$
-
-Limitations:
-
-1. The source code of a LaTeX math expression must be in one line, unless it is inside a pair of double dollar signs, in which case the starting `$$` must appear in the very beginning of a line, followed immediately by a non-space character, and the ending `$$` must be at the end of a line, led by a non-space character;
-
-1. There should not be spaces after the opening `$` or before the closing `$`.
-
-1. Math does not work on the title slide (see [#61](https://github.com/yihui/xaringan/issues/61) for a workaround).
-
----
-
-# Feeling adventurous?
-
-- Want to find out more about `xaringan`? See https://slides.yihui.name/xaringan/#1.
-
-- You are welcomed to use the default styling of the slides. In fact, that's what I expect majority of you will do. You will differentiate yourself with the content of your presentation.
-
-- But some of you might want to play around with slide styling. The 
-`xaringanthemer` provides some solutions for this that: https://pkg.garrickadenbuie.com/xaringanthemer.
-
-- And if you want more bells and whistles, there is also `xaringanExtra`: https://pkg.garrickadenbuie.com/xaringanExtra.
