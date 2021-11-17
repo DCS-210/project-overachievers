@@ -200,14 +200,9 @@ class: left, middle
   
   * Both were pulled from kaggle.com
 
-```{r, echo=FALSE, out.width="100%", fig.align='left'}
+```{r, echo=FALSE, out.width=750, fig.align='center'}
 
-knitr::include_graphics("../presentation/img/happy-pic.png")
-```
-
-```{r, echo=FALSE, out.width="100%", fig.align='right'}
-
-knitr::include_graphics("../presentation/img/drug-pic.jpg")
+knitr::include_graphics("../presentation/img/happy-drug.png")
 ```
 
 
@@ -278,7 +273,7 @@ Happiness score = 2.819 + 2.257(family)
 
 * The adjusted r-squared was 0.39 meaning that 39% of the variance of the happiness scores were explained by the variance of the Family variable. 
 
-*This refutes our hypothesis. 
+* This refutes our hypothesis. 
 ]
 
 .pull-right[
@@ -365,11 +360,12 @@ NonEUcountries_lr <-
 
 ---
 
-class: left, left
+class: left, top
 
 ### The higher the percent of drug spending on GDP, the higher the percent spent on pharmaceutical drugs in healthcare
 
-```{r finding-GDP-healthXP-in-Europe-2015, echo=FALSE}
+.pull-center[
+```{r finding-GDP-healthXP-in-Europe-2015, echo=FALSE, fig.align = 'center', out.width = 750}
 drug_spending %>%
     filter(Continent == "Europe") %>%
     ggplot(aes(x = PC_GDP, y = PC_HEALTHXP, colour = Country)) +
@@ -378,11 +374,12 @@ drug_spending %>%
               color = "black",
               size = 0.3,
               se = FALSE) +
-    labs(x = "Percent of Drug Spending on GDP",
-         y = "Percent of Drug Spending on Total Healthcare Spending", 
-        title = "Pharmaceutical Drug Spending As A Share of Total Healthcare Spending & GDP",
-        subtitle = "in European Countries")
+    labs(x = "% Drug Spending on GDP",
+         y = "% Drug Spending on Total Healthcare Spending", 
+        title = "Drug Spending in Europe",
+        subtitle = "As A Share of Total Healthcare Spending & GDP")
 ```
+]
 
 ---
 
@@ -495,6 +492,7 @@ knitr::include_graphics("../presentation/img/schengen-countries-map-2020.png")
 
 ```
 ]
+.footnote[Map by Evan Centanni from www.polgeonow.com]
 
 .pull-right[
 ```{r europe-map-2, echo=FALSE, warning=FALSE, out.height="30%", out.width="100%"}
