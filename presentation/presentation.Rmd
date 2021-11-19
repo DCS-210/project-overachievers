@@ -16,7 +16,7 @@ output:
 ---
 
 ```{r load-packages, include = FALSE}
-# Add any additional packages you need to this chunk
+# Packages needed
 library(tidyverse)
 library(tidymodels)
 library(palmerpenguins)
@@ -24,17 +24,12 @@ library(knitr)
 library(xaringanthemer)
 library(broom)
 library(countrycode)
-library(RColorBrewer)
-library(rgdal)
-library(leaflet)
-library("sf")
-library("raster")
+library(RColorBrewer) # color palette
 library("sp")
 #install.packages("rnaturalearth")
-library(rnaturalearth)
+library(rnaturalearth) # for our map
 #install.packages("plotly")
 library(plotly)
-library(rgeos)
 ```
 
 ```{r setup, include=FALSE}
@@ -100,7 +95,9 @@ finaldf <- rename(finaldf, Country = `european_combined$Country`)
 
 
 ```{r add-geometry-to-df, include=FALSE}
+# add Europe map using rnaturalearth package
 europe <- ne_countries(continent = 'europe', returnclass="sf")
+# join europe map dataframe with our current dataframe
 europe_map_df<- full_join(finaldf, europe, by = c("Country" = "name"))
 ```
 
@@ -115,8 +112,10 @@ style_xaringan(
 happy2015 <- happiness %>%
      mutate(western_level = case_when(Region %in% "Australia and New Zealand" ~ "Western",
                                      Region %in% "Central and Eastern Europe" ~ "Western",
-                                     Region %in% "Eastern Asia" ~ "Non-Western",                                        Region %in% "Latin America and Caribbean" ~ "Western",
-                                     Region %in% "Middle East and Northern Africa" ~ "Non-Western",
+                                     Region %in% "Eastern Asia" ~ "Non-Western",
+                                     Region %in% "Latin America and Caribbean" ~ "Western",
+                                     Region %in% "Middle East and Northern Africa"
+                                                    ~ "Non-Western",
                                      Region %in% "North America" ~ "Western",
                                      Region %in% "Southeastern Asia" ~ "Non-Western",
                                      Region %in% "Southern Asia" ~ "Non-Western",
@@ -134,9 +133,8 @@ nonwestern_countries
 ```
 
 ```{r filter-AllEU, include=FALSE}
-AllEUcountries <- 
-western_countries %>%
-filter( Region %in% c("Central and Eastern Europe","Western Europe"))
+AllEUcountries <- western_countries %>% 
+                  filter(Region %in% c("Central and Eastern Europe","Western Europe"))
 AllEUcountries
 ```
 
@@ -153,10 +151,12 @@ AllEUcountries <- AllEUcountries %>%
                                      Country %in% "Finland" ~ "EU",   
                                      Country %in% "France" ~ "EU",            
                                      Country %in% "Germany" ~ "EU",       
-                                     Country %in% "Greece" ~ "EU",                                                    Country %in% "Hungary" ~ "EU",
+                                     Country %in% "Greece" ~ "EU",
+                                     Country %in% "Hungary" ~ "EU",
                                      Country %in% "Ireland" ~ "EU",   
                                      Country %in% "Italy" ~ "EU",    
-                                     Country %in% "Latvia" ~ "EU",                                                    Country %in% "Lithuania" ~ "EU", 
+                                     Country %in% "Latvia" ~ "EU",
+                                     Country %in% "Lithuania" ~ "EU", 
                                      Country %in% "Luxembourg" ~ "EU", 
                                      Country %in% "Malta" ~ "EU",  
                                      Country %in% "Netherlands" ~ "EU",   
@@ -164,10 +164,11 @@ AllEUcountries <- AllEUcountries %>%
                                      Country %in% "Portugal" ~ "EU",  
                                      Country %in% "Romania" ~ "EU",     
                                      Country %in% "Slovakia" ~ "EU",  
-                                     Country %in% "Slovenia" ~ "EU",                                                  Country %in% "Spain" ~ "EU",     
+                                     Country %in% "Slovenia" ~ "EU",
+                                     Country %in% "Spain" ~ "EU",     
                                      Country %in% "Sweden" ~ "EU",   
-                                     TRUE ~ "Non-EU"
-) )
+                                     TRUE ~ "Non-EU") 
+                                     )
 ```
 
 ```{r filter-EU, include=FALSE}
@@ -188,23 +189,22 @@ class: center, middle
 
 ---
 
-class: left, middle
+class: left, top
 
 # Background
 
 * Two pieces of information we are interested in: 
 
   * World Happiness Report, a measurement of state of global happiness 
-  
   * Pharmaceutical drug spending, a potential contributing factor a nation’s happiness score
-  
   * Both were pulled from kaggle.com
 
-```{r, echo=FALSE, out.width=750, fig.align='center'}
+```{r, echo=FALSE, out.width=650, fig.align='center'}
 
 knitr::include_graphics("../presentation/img/happy-drug.png")
 ```
 
+.footnote[Image 1 retrieved from Sarah Ahmed's blog post on WellNest Psychotherapy Services website; image 2 retrieved from Patrick Cox blog post on rodmartin.org]
 
 ???
 - The World Happiness Report measures the state of global happiness using a survey where respondents rate their own lives based on different factors and was availible at kaggle.com. This includes family, freedom, health, economy and trust towards the government. This report is important because since it first came out in 2012, it gained global recognition from governments, organizations and civil society and has been administered every year since. The measurements of well-being could potentially be used to assess the progress of a nation, informing their  policy-making decisions from happiness indicators measured in the report. 
@@ -236,7 +236,7 @@ class: left, middle
 * We ran a linear regression to see the potential relationship between the Family variable and Happiness Scores for western countries. 
 
 * The linear regression line found was: 
-Happiness score = 2.347 + 3.259(family)
+$$Happiness score = 2.347 + 3.259 * (family)$$
 
 * The adjusted r-squared was 0.45 meaning that 45% of the variance of the happiness scores were explained by the variance of the Family variable. 
 ]
@@ -252,10 +252,9 @@ ggplot(western_countries, aes(x = `Happiness Score`, y = Family)) +
        x = "Happiness Score",
        y = "Family")
 
-western_countries_lr <- 
-  linear_reg() %>%
-  set_engine("lm") %>%
-  fit(`Happiness Score` ~ Family, data = western_countries) 
+western_countries_lr <- linear_reg() %>%
+                        set_engine("lm") %>%
+                        fit(`Happiness Score` ~ Family, data = western_countries) 
 ```
 ]
 
@@ -269,7 +268,7 @@ class: left, middle
 * Similarly, we ran a linear regression to see the potential relationship between the Family variable and Happiness Scores for non-western countries. 
 
 * The linear regression line found was: 
-Happiness score = 2.819 + 2.257(family)
+$$Happiness score = 2.819 + 2.257 * (family)$$
 
 * The adjusted r-squared was 0.39 meaning that 39% of the variance of the happiness scores were explained by the variance of the Family variable. 
 
@@ -287,10 +286,9 @@ ggplot(nonwestern_countries, aes(x = `Happiness Score`, y = Family)) +
        x = "Happiness Score",
        y = "Family")
 
-nonwestern_countries_lr <- 
-  linear_reg() %>%
-  set_engine("lm") %>%
-  fit(`Happiness Score` ~ Family, data = nonwestern_countries) 
+nonwestern_countries_lr <- linear_reg() %>%
+                           set_engine("lm") %>%
+                           fit(`Happiness Score` ~ Family, data = nonwestern_countries) 
 ```
 ]
 
@@ -304,7 +302,7 @@ class: left, left
 * We then looked into a linear regression to see the potential relationship between the Family variable and Happiness Scores for European countries. We broke it down into 2 parts: EU countries and non-EU countries. 
 
 * The linear regression line for EU countries found was: 
-Happiness score = 2.451 + 2.299(family)
+$$Happiness score = 2.451 + 2.299 * (family)$$
 
 * The adjusted r-squared was 0.68 meaning that 68% of the variance of the happiness scores were explained by the variance of the Family variable.
 ]
@@ -334,8 +332,7 @@ CountriesEU_lr <-
 .pull-left[
 * We performed the same analysis for European countries which are not part of the EU.
 
-* The linear regression line for these countries found was found to be the same as EU countries: 
-Happiness score = 2.451 + 2.299(family)
+* The linear regression line for these countries found was found to be the same as EU countries: $$Happiness score = 2.451 + 2.299 * (family)$$
 
 * This did not add to our hypothesis. 
 ]
@@ -351,10 +348,9 @@ ggplot(NonEUcountries, aes(x = `Happiness Score`, y = Family)) +
        x = "Happiness Score",
        y = "Family")
 
-NonEUcountries_lr <- 
-  linear_reg() %>%
-  set_engine("lm") %>%
-  fit(`Happiness Score` ~ Family, data = NonEUcountries) 
+NonEUcountries_lr <- linear_reg() %>%
+                     set_engine("lm") %>%
+                     fit(`Happiness Score` ~ Family, data = NonEUcountries) 
 ```
 ]
 
@@ -376,8 +372,8 @@ drug_spending %>%
               se = FALSE) +
     labs(x = "% Drug Spending on GDP",
          y = "% Drug Spending on Total Healthcare Spending", 
-        title = "Drug Spending in Europe",
-        subtitle = "As A Share of Total Healthcare Spending & GDP")
+         title = "Drug Spending in Europe",
+         subtitle = "As A Share of Total Healthcare Spending & GDP")
 ```
 ]
 
@@ -388,10 +384,9 @@ class: left, middle
 ### Percent GDP (Pharmaceutical Spending) on Countries' Happiness Scores
 
 ```{r linear-regresssion-PC_GDP-Happiness-Score, include = FALSE}
-gdp_happiness <- 
-  linear_reg() %>%
-  set_engine("lm") %>%
-  fit(`Happiness Score` ~ PC_GDP, data = european_combined)
+gdp_happiness <- linear_reg() %>%
+                 set_engine("lm") %>%
+                 fit(`Happiness Score` ~ PC_GDP, data = european_combined)
 gdp_happiness
 ```
 
@@ -418,7 +413,7 @@ european_combined %>%
 * We ran a linear regression to see the potential relationship between percent of GPD (spending on pharmaceuticals) and Happiness Scores. 
 
 * The linear regression line found was: 
-happiness score = 8.368 - 1.423(Percent GDP)
+$$Happiness score = 8.368 - 1.423 * (Percent GDP)$$
 
 * The adjusted r-squared was 0.38 meaning that 38% of the variance of the happiness scores were explained by the variance of the percent spending of GDP. 
 
@@ -487,25 +482,24 @@ class: left, middle
 #Implication
 
 .pull-left[
-```{r, echo=FALSE, out.width=1050, fig.align='center', fig.cap="A map of Europe containing the schengen countries, EU and non-EU countries"}
+```{r, echo=FALSE, out.width=1050, fig.align='center', fig.cap="A map of Europe containing the schengen countries, EU and non-EU countries from www.polgeonow.com."}
 
 knitr::include_graphics("../presentation/img/schengen-countries-map-2020.png")
 
 ```
 ]
-.footnote[Map by Evan Centanni from www.polgeonow.com]
 
 .pull-right[
 ```{r europe-map-2, echo=FALSE, warning=FALSE, out.height="30%", out.width="100%"}
 map <- ggplot(europe_map_df) +
-  geom_sf(aes(fill = .std.resid, geometry = europe_map_df$geometry)) +
-  labs(title = "Happiness Score vs. Residual Values in Europe",
-       x = "Longitude",
-       y = "Latitude", 
-       fill = "Residual Values") +
-  xlim(-40, 50) +
-  ylim(20, 85) +
-  scale_fill_distiller(palette = "Spectral", na.value = "white")
+       geom_sf(aes(fill = .std.resid, geometry = europe_map_df$geometry)) +
+       labs(title = "Happiness Score vs. Residual Values in Europe",
+            x = "Longitude",
+            y = "Latitude", 
+            fill = "Residual Values") +
+       xlim(-40, 50) +
+       ylim(20, 85) +
+       scale_fill_distiller(palette = "Spectral", na.value = "white")
 
 ggplotly(map)
 ```
