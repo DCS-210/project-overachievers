@@ -243,14 +243,14 @@ $$Happiness score = 2.347 + 3.259 * (family)$$
 
 .pull-right[
 ```{r plotting-linear-regression-line, echo= FALSE, out.width = "100%", warning=FALSE}
-ggplot(western_countries, aes(x = `Happiness Score`, y = Family)) +
+ggplot(western_countries, aes(y = `Happiness Score`, x = Family)) +
   geom_jitter(color = "blue") +
   geom_smooth(method = "lm", 
               color = "orange", 
               se = FALSE) +
   labs(title = "Family and Happiness Score for Western Countries ",
-       x = "Happiness Score",
-       y = "Family")
+       y = "Happiness Score",
+       x= "Family")
 
 western_countries_lr <- linear_reg() %>%
                         set_engine("lm") %>%
