@@ -242,7 +242,7 @@ $$Happiness score = 2.347 + 3.259 * (family)$$
 ]
 
 .pull-right[
-```{r plotting-linear-regression-line, echo= FALSE, out.width = "100%", warning=FALSE}
+```{r plotting-linear-regression-line, echo= FALSE, out.width = "100%", warning= FALSE, message= FALSE}
 ggplot(western_countries, aes(y = `Happiness Score`, x = Family)) +
   geom_jitter(color = "blue") +
   geom_smooth(method = "lm", 
