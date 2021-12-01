@@ -276,15 +276,15 @@ $$Happiness score = 2.819 + 2.257 * (family)$$
 ]
 
 .pull-right[
-```{r plotting-linear-regression-nonwestern, echo = FALSE, warning=FALSE, out.width = "100%"} 
-ggplot(nonwestern_countries, aes(x = `Happiness Score`, y = Family)) +
+```{r plotting-linear-regression-nonwestern, echo = FALSE, warning=FALSE, message = FALSE out.width = "100%"} 
+ggplot(nonwestern_countries, aes(y = `Happiness Score`, x = Family)) +
   geom_jitter(color = "blue") + 
   geom_smooth(method = "lm", 
               color = "orange", 
               se = FALSE) +
   labs(title = "Family and Happiness Score for Non-Western Countries ",
-       x = "Happiness Score",
-       y = "Family")
+       y = "Happiness Score",
+       x = "Family")
 
 nonwestern_countries_lr <- linear_reg() %>%
                            set_engine("lm") %>%
@@ -308,15 +308,15 @@ $$Happiness score = 2.451 + 2.299 * (family)$$
 ]
 
 .pull-right[
-```{r plotting-linear-regression-EU, echo = FALSE, warning=FALSE, out.width = "100%"}
-ggplot(CountriesEU, aes(x = `Happiness Score`, y = Family)) +
+```{r plotting-linear-regression-EU, echo = FALSE, warning=FALSE, message= FALSE, out.width = "100%"}
+ggplot(CountriesEU, aes(y = `Happiness Score`, x = Family)) +
   geom_jitter(color = "blue") +
   geom_smooth(method = "lm", 
               color = "orange", 
               se = FALSE) +
   labs(title = "Family and Happiness Score for EU countries ",
-       x = "Happiness Score",
-       y = "Family")
+       y = "Happiness Score",
+       x = "Family")
 
 CountriesEU_lr <- 
   linear_reg() %>%
@@ -338,7 +338,7 @@ CountriesEU_lr <-
 ]
 
 .pull-right[
-```{r plotting-linear-regression-nonEU, echo = FALSE, warning=FALSE, out.width = "100%"}
+```{r plotting-linear-regression-nonEU, echo = FALSE, warning=FALSE, message= FALSE, out.width = "100%"}
 ggplot(NonEUcountries, aes(x = `Happiness Score`, y = Family)) +
   geom_jitter(color = "blue") +
   geom_smooth(method = "lm", 
@@ -361,7 +361,7 @@ class: left, top
 ### The higher the percent of drug spending on GDP, the higher the percent spent on pharmaceutical drugs in healthcare
 
 .pull-center[
-```{r finding-GDP-healthXP-in-Europe-2015, echo=FALSE, warning=FALSE, fig.align = 'center', out.width = 750}
+```{r finding-GDP-healthXP-in-Europe-2015, echo=FALSE, warning=FALSE, message=FALSE,  fig.align = 'center', out.width = 750}
 drug_spending %>%
     filter(Continent == "Europe") %>%
     ggplot(aes(x = PC_GDP, y = PC_HEALTHXP, colour = Country)) +
@@ -395,7 +395,7 @@ glance(gdp_happiness)$adj.r.squared
 ```
 
 .pull-left[
-```{r plotting-with-line-of-best-fit, echo = FALSE, warning=FALSE, out.width = "100%"}
+```{r plotting-with-line-of-best-fit, echo = FALSE, warning=FALSE, message= FALSE, out.width = "100%"}
 european_combined %>%
     ggplot(aes(x = PC_GDP, y = `Happiness Score`, color = NonEU_EU)) +
     geom_point() +
