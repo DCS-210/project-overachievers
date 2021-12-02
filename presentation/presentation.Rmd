@@ -276,7 +276,7 @@ $$Happiness score = 2.819 + 2.257 * (family)$$
 ]
 
 .pull-right[
-```{r plotting-linear-regression-nonwestern, echo = FALSE, warning=FALSE, message = FALSE out.width = "100%"} 
+```{r plotting-linear-regression-nonwestern, echo = FALSE, warning=FALSE, message = FALSE, out.width = "100%"} 
 ggplot(nonwestern_countries, aes(y = `Happiness Score`, x = Family)) +
   geom_jitter(color = "blue") + 
   geom_smooth(method = "lm", 
@@ -361,16 +361,17 @@ class: left, top
 ### The higher the percent of drug spending on GDP, the higher the percent spent on pharmaceutical drugs in healthcare
 
 .pull-center[
-```{r finding-GDP-healthXP-in-Europe-2015, echo=FALSE, warning=FALSE, message=FALSE,  fig.align = 'center', out.width = 750}
+```{r finding-GDP-healthXP-in-Europe-2015, echo=FALSE, warning=FALSE, message=FALSE, fig.align = 'center', out.width = 750}
 drug_spending %>%
     filter(Continent == "Europe") %>%
-    ggplot(aes(x = PC_GDP, y = PC_HEALTHXP, colour = Country)) +
+    ggplot(aes(x = PC_GDP, y = PC_HEALTHXP)) +
     geom_point() +
+    geom_text(aes(label = Country),hjust = 0, vjust = -0.8, size = 2.5) + 
     geom_smooth(method = "lm", 
               color = "black",
               size = 0.3,
               se = FALSE) +
-    labs(x = "% Drug Spending on GDP",
+    labs(x = "% GDP Spending on Drug",
          y = "% Drug Spending on Total Healthcare Spending", 
          title = "Drug Spending in Europe",
          subtitle = "As A Share of Total Healthcare Spending & GDP")
