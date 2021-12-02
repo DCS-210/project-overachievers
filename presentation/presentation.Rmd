@@ -199,7 +199,7 @@ class: left, top
   * Pharmaceutical drug spending, a potential contributing factor a nation’s happiness score
   * Both were pulled from kaggle.com
 
-```{r, echo=FALSE, out.width=650, fig.align='center'}
+```{r, fig.alt = "Images of people with happy faces and pill bottle with cash.", echo=FALSE, out.width=650, fig.align='center'}
 
 knitr::include_graphics("../presentation/img/happy-drug.png")
 ```
@@ -242,7 +242,7 @@ $$Happiness score = 2.347 + 3.259 * (family)$$
 ]
 
 .pull-right[
-```{r plotting-linear-regression-line, echo= FALSE, out.width = "100%", warning= FALSE, message= FALSE}
+```{r plotting-linear-regression-line, fig.alt = "Jitter plot of happiness score based on family score for western countries, where higher family rating show higher happiness score", echo= FALSE, out.width = "100%", warning= FALSE, message= FALSE}
 ggplot(western_countries, aes(y = `Happiness Score`, x = Family)) +
   geom_jitter(color = "blue") +
   geom_smooth(method = "lm", 
@@ -276,7 +276,7 @@ $$Happiness score = 2.819 + 2.257 * (family)$$
 ]
 
 .pull-right[
-```{r plotting-linear-regression-nonwestern, echo = FALSE, warning=FALSE, message = FALSE, out.width = "100%"} 
+```{r plotting-linear-regression-nonwestern, fig.alt = "Jitter plot of happiness score based on family score for non-western countries, where the effect of family is higher on happiness scores compared to western countries", echo = FALSE, warning=FALSE, message = FALSE, out.width = "100%"} 
 ggplot(nonwestern_countries, aes(y = `Happiness Score`, x = Family)) +
   geom_jitter(color = "blue") + 
   geom_smooth(method = "lm", 
@@ -308,7 +308,7 @@ $$Happiness score = 2.451 + 2.299 * (family)$$
 ]
 
 .pull-right[
-```{r plotting-linear-regression-EU, echo = FALSE, warning=FALSE, message= FALSE, out.width = "100%"}
+```{r plotting-linear-regression-EU, fig.alt = "Jitter plot of happiness score based on family score for European Union (EU) countries, where 68% of variance of happiness score expalined by the family variable", echo = FALSE, warning=FALSE, message= FALSE, out.width = "100%"}
 ggplot(CountriesEU, aes(y = `Happiness Score`, x = Family)) +
   geom_jitter(color = "blue") +
   geom_smooth(method = "lm", 
@@ -338,15 +338,15 @@ CountriesEU_lr <-
 ]
 
 .pull-right[
-```{r plotting-linear-regression-nonEU, echo = FALSE, warning=FALSE, message= FALSE, out.width = "100%"}
-ggplot(NonEUcountries, aes(x = `Happiness Score`, y = Family)) +
+```{r plotting-linear-regression-nonEU, fig.alt = "Jitter plot of happiness score based on family score for non-EU countries, where linear regression line was the same with that for EU countries", echo = FALSE, warning=FALSE, message= FALSE, out.width = "100%"}
+ggplot(NonEUcountries, aes(y = `Happiness Score`, x = Family)) +
   geom_jitter(color = "blue") +
   geom_smooth(method = "lm", 
               color = "orange", 
               se = FALSE) +
   labs(title = "Family and Happiness Score for Non-EU Countries ",
-       x = "Happiness Score",
-       y = "Family")
+       y = "Happiness Score",
+       x = "Family")
 
 NonEUcountries_lr <- linear_reg() %>%
                      set_engine("lm") %>%
@@ -358,10 +358,10 @@ NonEUcountries_lr <- linear_reg() %>%
 
 class: left, top
 
-### The higher the percent of drug spending on GDP, the higher the percent spent on pharmaceutical drugs in healthcare
+### The higher the percent GDP spending on drugs, the higher the percent spent on pharmaceutical drugs in healthcare
 
 .pull-center[
-```{r finding-GDP-healthXP-in-Europe-2015, echo=FALSE, warning=FALSE, message=FALSE, fig.align = 'center', out.width = 750}
+```{r finding-GDP-healthXP-in-Europe-2015, fig.alt = "Scatterplot of percent GDP spending on drug and percent drug spending on total healthcare spending, where there is a positive relationship for the European countries", echo=FALSE, warning=FALSE, message=FALSE, fig.align = 'center', out.width = 750}
 drug_spending %>%
     filter(Continent == "Europe") %>%
     ggplot(aes(x = PC_GDP, y = PC_HEALTHXP)) +
@@ -396,7 +396,7 @@ glance(gdp_happiness)$adj.r.squared
 ```
 
 .pull-left[
-```{r plotting-with-line-of-best-fit, echo = FALSE, warning=FALSE, message= FALSE, out.width = "100%"}
+```{r plotting-with-line-of-best-fit, fig.alt = "Scatterplot of happiness score vs. percent GDP spending on pharmaceutical drugs in European countries, where there is a negative relatioship between the two variables", echo = FALSE, warning=FALSE, message= FALSE, out.width = "100%"}
 european_combined %>%
     ggplot(aes(x = PC_GDP, y = `Happiness Score`, color = NonEU_EU)) +
     geom_point() +
@@ -429,7 +429,7 @@ class: left, middle
 # Implication
 
 .pull-left[
-```{r plotting-residuals, echo=FALSE, message = FALSE, warning=FALSE, out.height="30%", out.width="100%"}
+```{r plotting-residuals, fig.alt = "Residual plot of happiness score vs. percent drug spending as a share of GDP in European countries, where Switzerland (outside of EU) has a much higher happiness score than expected", echo=FALSE, message = FALSE, warning=FALSE, out.height="30%", out.width="100%"}
 fit <- lm(`Happiness Score` ~ PC_GDP, data = european_combined) # fit the model
 european_combined$predicted <- predict(fit)   # Save the predicted values
 european_combined$residuals <- residuals(fit) # Save the residual values
@@ -458,7 +458,7 @@ ggplot(european_combined, aes(x = PC_GDP, y = `Happiness Score`)) +
 ]
 
 .pull-right[
-```{r europe-map, echo=FALSE, warning=FALSE, out.height="30%", out.width="100%"}
+```{r europe-map, fig-alt="Residual plot of happiness score vs. percent drug spending as a share of GDP in European countries, where Switzerland and other Western European countries show higher normalized residual scores", echo=FALSE, warning=FALSE, out.height="30%", out.width="100%"}
 map <- ggplot(europe_map_df) +
   geom_sf(aes(fill = .std.resid, geometry = europe_map_df$geometry)) +
   labs(title = "Happiness Score vs. Residual Values in Europe",
@@ -483,7 +483,7 @@ class: left, middle
 #Implication
 
 .pull-left[
-```{r, echo=FALSE, out.width=1050, fig.align='center', fig.cap="A map of Europe containing the schengen countries, EU and non-EU countries from www.polgeonow.com."}
+```{r, fig-alt="Map of Europe, where each colors represent countries in Schengen region, EU or outside EU", echo = FALSE, out.width=1050, fig.align='center', fig.cap="A map of Europe containing the schengen countries, EU and non-EU countries from www.polgeonow.com."}
 
 knitr::include_graphics("../presentation/img/schengen-countries-map-2020.png")
 
@@ -491,7 +491,7 @@ knitr::include_graphics("../presentation/img/schengen-countries-map-2020.png")
 ]
 
 .pull-right[
-```{r europe-map-2, echo=FALSE, warning=FALSE, out.height="30%", out.width="100%"}
+```{r europe-map-2, fig-alt="Residual plot of happiness score vs. percent drug spending as a share of GDP in European countries, where Northern Europe and Eastern Europe tend to have a lower normalized residual scores", echo=FALSE, warning=FALSE, out.height="30%", out.width="100%"}
 map <- ggplot(europe_map_df) +
        geom_sf(aes(fill = .std.resid, geometry = europe_map_df$geometry)) +
        labs(title = "Happiness Score vs. Residual Values in Europe",
